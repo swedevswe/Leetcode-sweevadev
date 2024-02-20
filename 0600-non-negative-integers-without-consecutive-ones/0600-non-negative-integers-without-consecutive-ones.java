@@ -8,7 +8,6 @@ class Solution {
             fib[i] = fib[i - 1] + fib[i - 2];
         }
         
-        int last_bit = 0;
         int result = 0;
         int k = 30;
         
