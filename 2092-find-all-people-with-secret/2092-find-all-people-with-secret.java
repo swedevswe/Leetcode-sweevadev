@@ -1,65 +1,49 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        // Initialize the groups array to keep track of each person's group.
-        int[] groups = new int[n];
-        for (int i = 0; i < n; ++i) groups[i] = i;
-        // Initially, firstPerson is in the same group as person 0 (they share the secret).
-        groups[firstPerson] = 0;
+        // For every person, we store the meeting time and label of the person met.
+        Map<Integer, List<int[]>> graph = new HashMap<>();
+        for (int[] meeting : meetings) {
+            int x = meeting[0], y = meeting[1], t = meeting[2];
+            graph.computeIfAbsent(x, k -> new ArrayList<>()).add(new int[]{t, y});
+            graph.computeIfAbsent(y, k -> new ArrayList<>()).add(new int[]{t, x});
+        }
 
-        // Sort the meetings by their time to process them in chronological order.
-        Arrays.sort(meetings, Comparator.comparingInt(a -> a[2]));
+        // Earliest time at which a person learned the secret 
+        // as per current state of knowledge. If due to some new information, 
+        // the earliest time of knowing the secret changes, we will update it
+        // and again process all the people whom he/she meets after the time
+        // at which he/she learned the secret.
+        int[] earliest = new int[n];
+        Arrays.fill(earliest, Integer.MAX_VALUE);
+        earliest[0] = 0;
+        earliest[firstPerson] = 0;
+        
+        // Queue for BFS. It will store (person, time of knowing the secret)
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{0, 0});
+        q.offer(new int[]{firstPerson, 0});
 
-        // Temporary list to keep track of participants in the current time slot.
-        List<Integer> currentMeetingParticipants = new ArrayList<>();
-
-        int i = 0;
-        while (i < meetings.length) {
-            int currentTime = meetings[i][2];
-            currentMeetingParticipants.clear();
-
-            // Process all meetings that occur at the current time.
-            while (i < meetings.length && meetings[i][2] == currentTime) {
-                int personA = meetings[i][0];
-                int personB = meetings[i][1];
-
-                // Find the groups of the two meeting participants.
-                int groupA = findGroup(groups, personA);
-                int groupB = findGroup(groups, personB);
-
-                // Union the groups by updating the group of the higher-indexed person to the lower one.
-                groups[Math.max(groupA, groupB)] = Math.min(groupA, groupB);
-
-                // Add participants to the temporary list.
-                currentMeetingParticipants.add(personA);
-                currentMeetingParticipants.add(personB);
-
-                ++i;
-            }
-
-            // Reset the group of any participant who is not in group 0 after the meetings.
-            for (int participant : currentMeetingParticipants) {
-                if (findGroup(groups, participant) != 0) {
-                    groups[participant] = participant;
+        // Do BFS
+        while (!q.isEmpty()) {
+            int[] personTime = q.poll();
+            int person = personTime[0], time = personTime[1];
+            for (int[] nextPersonTime : graph.getOrDefault(person, new ArrayList<>())) {
+                int t = nextPersonTime[0], nextPerson = nextPersonTime[1];
+                if (t >= time && earliest[nextPerson] > t) {
+                    earliest[nextPerson] = t;
+                    q.offer(new int[]{nextPerson, t});
                 }
             }
         }
-
-        // Compile the list of people who are in group 0 (know the secret) after all meetings.
-        List<Integer> peopleWhoKnowSecret = new ArrayList<>();
-        for (int j = 0; j < n; ++j) {
-            if (findGroup(groups, j) == 0) {
-                peopleWhoKnowSecret.add(j);
+        
+        // Since we visited only those people who know the secret,
+        // we need to return indices of all visited people.
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < n; ++i) {
+            if (earliest[i] != Integer.MAX_VALUE) {
+                ans.add(i);
             }
         }
-
-        return peopleWhoKnowSecret;
-    }
-
-    // Helper method to find the group of a person using path compression.
-    private int findGroup(int[] groups, int person) {
-        if (person != groups[person]) {
-            groups[person] = findGroup(groups, groups[person]);
-        }
-        return groups[person];
+        return ans;
     }
 }
