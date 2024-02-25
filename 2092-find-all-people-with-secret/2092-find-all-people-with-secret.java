@@ -1,42 +1,65 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        int[] groups = new int[100000];
-        List<Integer> result = new ArrayList<>();
-        List<Integer> temp = new ArrayList<>();
-
+        // Initialize the groups array to keep track of each person's group.
+        int[] groups = new int[n];
         for (int i = 0; i < n; ++i) groups[i] = i;
+        // Initially, firstPerson is in the same group as person 0 (they share the secret).
         groups[firstPerson] = 0;
 
-        Arrays.sort(meetings, (a, b) -> Integer.compare(a[2], b[2]));
+        // Sort the meetings by their time to process them in chronological order.
+        Arrays.sort(meetings, Comparator.comparingInt(a -> a[2]));
+
+        // Temporary list to keep track of participants in the current time slot.
+        List<Integer> currentMeetingParticipants = new ArrayList<>();
 
         int i = 0;
         while (i < meetings.length) {
             int currentTime = meetings[i][2];
-            temp.clear();
+            currentMeetingParticipants.clear();
+
+            // Process all meetings that occur at the current time.
             while (i < meetings.length && meetings[i][2] == currentTime) {
-                int g1 = find(groups, meetings[i][0]);
-                int g2 = find(groups, meetings[i][1]);
-                groups[Math.max(g1, g2)] = Math.min(g1, g2);
-                temp.add(meetings[i][0]);
-                temp.add(meetings[i][1]);
+                int personA = meetings[i][0];
+                int personB = meetings[i][1];
+
+                // Find the groups of the two meeting participants.
+                int groupA = findGroup(groups, personA);
+                int groupB = findGroup(groups, personB);
+
+                // Union the groups by updating the group of the higher-indexed person to the lower one.
+                groups[Math.max(groupA, groupB)] = Math.min(groupA, groupB);
+
+                // Add participants to the temporary list.
+                currentMeetingParticipants.add(personA);
+                currentMeetingParticipants.add(personB);
+
                 ++i;
             }
-            for (int j = 0; j < temp.size(); ++j) {
-                if (find(groups, temp.get(j)) != 0) {
-                    groups[temp.get(j)] = temp.get(j);
+
+            // Reset the group of any participant who is not in group 0 after the meetings.
+            for (int participant : currentMeetingParticipants) {
+                if (findGroup(groups, participant) != 0) {
+                    groups[participant] = participant;
                 }
             }
         }
 
+        // Compile the list of people who are in group 0 (know the secret) after all meetings.
+        List<Integer> peopleWhoKnowSecret = new ArrayList<>();
         for (int j = 0; j < n; ++j) {
-            if (find(groups, j) == 0) result.add(j);
+            if (findGroup(groups, j) == 0) {
+                peopleWhoKnowSecret.add(j);
+            }
         }
 
-        return result;
+        return peopleWhoKnowSecret;
     }
 
-    private int find(int[] groups, int index) {
-        while (index != groups[index]) index = groups[index];
-        return index;
+    // Helper method to find the group of a person using path compression.
+    private int findGroup(int[] groups, int person) {
+        if (person != groups[person]) {
+            groups[person] = findGroup(groups, groups[person]);
+        }
+        return groups[person];
     }
 }
