@@ -1,47 +1,42 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        // List to store the final answer.
-        List<Integer> ans = new ArrayList<>();
-        // Set to keep track of people who have been added to the answer list.
-        Set<Integer> added = new HashSet<>();
-        
-        // Priority queue to process people in the order they learn the secret.
-        PriorityQueue<int[]> known = new PriorityQueue<>(Comparator.comparingInt(p -> p[1]));
-        known.offer(new int[]{0, 0}); // Person 0 knows the secret at time 0.
-        known.offer(new int[]{firstPerson, 0}); // firstPerson knows the secret at time 0.
-        
-        // Map to store meetings for each person.
-        Map<Integer, List<int[]>> meetingsMap = new HashMap<>();
-        for (int[] meeting : meetings) {
-            meetingsMap.computeIfAbsent(meeting[0], k -> new ArrayList<>()).add(new int[]{meeting[1], meeting[2]});
-            meetingsMap.computeIfAbsent(meeting[1], k -> new ArrayList<>()).add(new int[]{meeting[0], meeting[2]});
-        }
-        
-        // Process each person in the priority queue.
-        while (!known.isEmpty()) {
-            int[] current = known.poll();
-            
-            // Add the person to the answer list if not already added.
-            if (added.add(current[0])) {
-                ans.add(current[0]);
+        int[] groups = new int[100000];
+        List<Integer> result = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+
+        for (int i = 0; i < n; ++i) groups[i] = i;
+        groups[firstPerson] = 0;
+
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[2], b[2]));
+
+        int i = 0;
+        while (i < meetings.length) {
+            int currentTime = meetings[i][2];
+            temp.clear();
+            while (i < meetings.length && meetings[i][2] == currentTime) {
+                int g1 = find(groups, meetings[i][0]);
+                int g2 = find(groups, meetings[i][1]);
+                groups[Math.max(g1, g2)] = Math.min(g1, g2);
+                temp.add(meetings[i][0]);
+                temp.add(meetings[i][1]);
+                ++i;
             }
-            
-            // Skip if there are no meetings for the current person.
-            if (!meetingsMap.containsKey(current[0])) continue;
-            
-            // Process meetings for the current person.
-            for (int[] meeting : meetingsMap.get(current[0])) {
-                // Skip if the meeting occurred before the person knew the secret.
-                if (meeting[1] < current[1]) continue;
-                
-                // Add the person they met with to the queue.
-                known.offer(new int[]{meeting[0], meeting[1]});
+            for (int j = 0; j < temp.size(); ++j) {
+                if (find(groups, temp.get(j)) != 0) {
+                    groups[temp.get(j)] = temp.get(j);
+                }
             }
-            
-            // Remove the person from the map to avoid reprocessing.
-            meetingsMap.remove(current[0]);
         }
 
-        return ans;
+        for (int j = 0; j < n; ++j) {
+            if (find(groups, j) == 0) result.add(j);
+        }
+
+        return result;
+    }
+
+    private int find(int[] groups, int index) {
+        while (index != groups[index]) index = groups[index];
+        return index;
     }
 }
