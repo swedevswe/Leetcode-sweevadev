@@ -1,87 +1,47 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        // Sort meetings based on their scheduled times for chronological processing.
-        Arrays.sort(meetings, Comparator.comparingInt(a -> a[2]));
+        // List to store the final answer.
+        List<Integer> ans = new ArrayList<>();
+        // Set to keep track of people who have been added to the answer list.
+        Set<Integer> added = new HashSet<>();
         
-        // Initialize Union-Find to manage connections between individuals.
-        UnionFind uf = new UnionFind(n);
-        // Initially, person 0 and firstPerson are connected (know the secret).
-        uf.union(0, firstPerson);
+        // Priority queue to process people in the order they learn the secret.
+        PriorityQueue<int[]> known = new PriorityQueue<>(Comparator.comparingInt(p -> p[1]));
+        known.offer(new int[]{0, 0}); // Person 0 knows the secret at time 0.
+        known.offer(new int[]{firstPerson, 0}); // firstPerson knows the secret at time 0.
         
-        // Iterate through meetings, processing those at the same time together.
-        int i = 0;
-        while (i < meetings.length) {
-            int currentTime = meetings[i][2];
-            Set<Integer> currentPool = new HashSet<>();
-            
-            // Union participants of meetings at the current time and track them.
-            while (i < meetings.length && meetings[i][2] == currentTime) {
-                int[] meeting = meetings[i];
-                uf.union(meeting[0], meeting[1]);
-                currentPool.add(meeting[0]);
-                currentPool.add(meeting[1]);
-                i++;
-            }
-            
-            // Reset connections for individuals not connected to person 0 (do not know the secret).
-            Set<Integer> toReset = new HashSet<>();
-            for (int person : currentPool) {
-                if (!uf.isConnected(0, person)) {
-                    toReset.add(person);
-                }
-            }
-            toReset.forEach(uf::reset);
+        // Map to store meetings for each person.
+        Map<Integer, List<int[]>> meetingsMap = new HashMap<>();
+        for (int[] meeting : meetings) {
+            meetingsMap.computeIfAbsent(meeting[0], k -> new ArrayList<>()).add(new int[]{meeting[1], meeting[2]});
+            meetingsMap.computeIfAbsent(meeting[1], k -> new ArrayList<>()).add(new int[]{meeting[0], meeting[2]});
         }
         
-        // Gather individuals connected to person 0 (know the secret) after all meetings.
-        List<Integer> result = new ArrayList<>();
-        for (int j = 0; j < n; j++) {
-            if (uf.isConnected(j, 0)) {
-                result.add(j);
+        // Process each person in the priority queue.
+        while (!known.isEmpty()) {
+            int[] current = known.poll();
+            
+            // Add the person to the answer list if not already added.
+            if (added.add(current[0])) {
+                ans.add(current[0]);
             }
+            
+            // Skip if there are no meetings for the current person.
+            if (!meetingsMap.containsKey(current[0])) continue;
+            
+            // Process meetings for the current person.
+            for (int[] meeting : meetingsMap.get(current[0])) {
+                // Skip if the meeting occurred before the person knew the secret.
+                if (meeting[1] < current[1]) continue;
+                
+                // Add the person they met with to the queue.
+                known.offer(new int[]{meeting[0], meeting[1]});
+            }
+            
+            // Remove the person from the map to avoid reprocessing.
+            meetingsMap.remove(current[0]);
         }
-        return result;
-    }
-    
-    // Union-Find data structure with path compression and union by rank.
-    static class UnionFind {
-        int[] parent, rank;
 
-        public UnionFind(int size) {
-            parent = new int[size];
-            rank = new int[size];
-            Arrays.fill(parent, -1);
-            Arrays.fill(rank, 0);
-        }
-        
-        public int find(int x) {
-            if (parent[x] == -1) return x;
-            return parent[x] = find(parent[x]);
-        }
-        
-        public void union(int x, int y) {
-            int rootX = find(x);
-            int rootY = find(y);
-            if (rootX != rootY) {
-                if (rank[rootX] > rank[rootY]) {
-                    parent[rootY] = rootX;
-                } else if (rank[rootX] < rank[rootY]) {
-                    parent[rootX] = rootY;
-                } else {
-                    parent[rootY] = rootX;
-                    rank[rootX]++;
-                }
-            }
-        }
-        
-        public boolean isConnected(int x, int y) {
-            return find(x) == find(y);
-        }
-        
-        // Resets the parent and rank of an individual, indicating disconnection.
-        public void reset(int x) {
-            parent[x] = -1;
-            rank[x] = 0;
-        }
+        return ans;
     }
 }
