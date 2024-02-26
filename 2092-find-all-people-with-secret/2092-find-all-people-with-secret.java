@@ -1,46 +1,60 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        // For every person, we store the meeting time and label of the person met.
-        Map<Integer, List<int[]>> graph = new HashMap<>();
+        // Sort meetings in increasing order of time
+        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
+
+        // Group Meetings in increasing order of time
+        Map<Integer, List<int[]>> sameTimeMeetings = new TreeMap<>();
         for (int[] meeting : meetings) {
             int x = meeting[0], y = meeting[1], t = meeting[2];
-            graph.computeIfAbsent(x, k -> new ArrayList<>()).add(new int[]{t, y});
-            graph.computeIfAbsent(y, k -> new ArrayList<>()).add(new int[]{t, x});
+            sameTimeMeetings.computeIfAbsent(t, k -> new ArrayList<>()).add(new int[]{x, y});
         }
         
-        // Earliest time at which a person learned the secret 
-        // as per current state of knowledge. If due to some new information, 
-        // the earliest time of knowing the secret changes, we will update it
-        // and again process all the people whom he/she meets after the time
-        // at which he/she learned the secret.
-        int[] earliest = new int[n];
-        Arrays.fill(earliest, Integer.MAX_VALUE);
-        earliest[0] = 0;
-        earliest[firstPerson] = 0;
+        // Boolean Array to mark if a person knows the secret or not
+        boolean[] knowsSecret = new boolean[n];
+        knowsSecret[0] = true;
+        knowsSecret[firstPerson] = true;
 
-        // Stack for DFS. It will store (person, time of knowing the secret)
-        Stack<int[]> stack = new Stack<>();
-        stack.push(new int[]{0, 0});
-        stack.push(new int[]{firstPerson, 0});
+        // Process in increasing order of time
+        for (int t : sameTimeMeetings.keySet()) {
+            // For each person, save all the people whom he/she meets at time t
+            Map<Integer, List<Integer>> meet = new HashMap<>();
+            for (int[] meeting : sameTimeMeetings.get(t)) {
+                int x = meeting[0], y = meeting[1];
+                meet.computeIfAbsent(x, k -> new ArrayList<>()).add(y);
+                meet.computeIfAbsent(y, k -> new ArrayList<>()).add(x);
+            }
 
-        // Do DFS
-        while (!stack.isEmpty()) {
-            int[] personTime = stack.pop();
-            int person = personTime[0], time = personTime[1];
-            for (int[] nextPersonTime : graph.getOrDefault(person, new ArrayList<>())) {
-                int t = nextPersonTime[0], nextPerson = nextPersonTime[1];
-                if (t >= time && earliest[nextPerson] > t) {
-                    earliest[nextPerson] = t;
-                    stack.push(new int[]{nextPerson, t});
+            // Start traversal from those who already know the secret at time t
+            // Set to avoid redundancy
+            Set<Integer> start = new HashSet<>();
+            for (int[] meeting : sameTimeMeetings.get(t)) {
+                int x = meeting[0], y = meeting[1];
+                if (knowsSecret[x]) {
+                    start.add(x);
+                }
+                if (knowsSecret[y]) {
+                    start.add(y);
+                }
+            }
+            
+            // Do BFS
+            Queue<Integer> q = new LinkedList<>(start);
+            while (!q.isEmpty()) {
+                int person = q.poll();
+                for (int nextPerson : meet.getOrDefault(person, new ArrayList<>())) {
+                    if (!knowsSecret[nextPerson]) {
+                        knowsSecret[nextPerson] = true;
+                        q.offer(nextPerson);
+                    }
                 }
             }
         }
         
-        // Since we visited only those people who know the secret
-        // we need to return indices of all visited people.
+        // List of people who know the secret
         List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            if (earliest[i] != Integer.MAX_VALUE) {
+            if (knowsSecret[i]) {
                 ans.add(i);
             }
         }
