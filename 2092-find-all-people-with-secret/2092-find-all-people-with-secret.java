@@ -7,7 +7,7 @@ class Solution {
             graph.computeIfAbsent(x, k -> new ArrayList<>()).add(new int[]{t, y});
             graph.computeIfAbsent(y, k -> new ArrayList<>()).add(new int[]{t, x});
         }
-
+        
         // Earliest time at which a person learned the secret 
         // as per current state of knowledge. If due to some new information, 
         // the earliest time of knowing the secret changes, we will update it
@@ -17,26 +17,26 @@ class Solution {
         Arrays.fill(earliest, Integer.MAX_VALUE);
         earliest[0] = 0;
         earliest[firstPerson] = 0;
-        
-        // Queue for BFS. It will store (person, time of knowing the secret)
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[]{0, 0});
-        q.offer(new int[]{firstPerson, 0});
 
-        // Do BFS
-        while (!q.isEmpty()) {
-            int[] personTime = q.poll();
+        // Stack for DFS. It will store (person, time of knowing the secret)
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{0, 0});
+        stack.push(new int[]{firstPerson, 0});
+
+        // Do DFS
+        while (!stack.isEmpty()) {
+            int[] personTime = stack.pop();
             int person = personTime[0], time = personTime[1];
             for (int[] nextPersonTime : graph.getOrDefault(person, new ArrayList<>())) {
                 int t = nextPersonTime[0], nextPerson = nextPersonTime[1];
                 if (t >= time && earliest[nextPerson] > t) {
                     earliest[nextPerson] = t;
-                    q.offer(new int[]{nextPerson, t});
+                    stack.push(new int[]{nextPerson, t});
                 }
             }
         }
         
-        // Since we visited only those people who know the secret,
+        // Since we visited only those people who know the secret
         // we need to return indices of all visited people.
         List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
