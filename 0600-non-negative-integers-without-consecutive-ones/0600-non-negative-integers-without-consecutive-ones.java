@@ -4,27 +4,28 @@ class Solution {
         fib[0] = 1;
         fib[1] = 2;
         for(int i = 2; i<32; i++){
-            fib[i] = fib[i-1] + fib[i-2];   
+            fib[i] = fib[i-1] + fib[i-2];
         }
-        int result = 0;
-        int k = 30;
-        
-        boolean prevBitOne = false;
-        
-        while(k>=0){
-            if((n&(1<<k)) != 0){
-                result += fib[k];
-                if(prevBitOne){
-                    result--;
-                    break;
+            int result = 0;
+            int k = 30;
+            
+            boolean prevBitOne = false;
+            
+            while(k>=0){
+                if((n&(1<<k)) != 0){
+                    result = result + fib[k];
+                    if(prevBitOne){
+                        result--;
+                        break;
+                    }
+                    prevBitOne = true;
+                }else{
+                    prevBitOne = false;
                 }
-                prevBitOne=true;
-            }else{
-                prevBitOne=false;
+                k--;
             }
-            k--;
+            return result + 1;
+            
         }
-        return result + 1;
         
     }
-}
