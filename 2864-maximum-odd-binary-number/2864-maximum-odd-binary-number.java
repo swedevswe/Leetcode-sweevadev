@@ -10,10 +10,21 @@ class Solution {
                 zeros++;
             }
         }
+        StringBuilder sb = new StringBuilder();
             if(ones==1){
-                return "0".repeat(zeros) + "1";
+                for(int i = 0; i<zeros; i++){
+                    sb.append("0");
+                }
+                sb.append("1");
             }else{
-                return "1".repeat(ones-1) + "0".repeat(zeros) + "1";
+                for(int i = 0; i<ones-1; i++){
+                    sb.append("1");
+                }
+                for(int i = 0; i<zeros; i++){
+                    sb.append("0");
+                }
+                sb.append("1");
             }
+                return sb.toString();
     }
 }
