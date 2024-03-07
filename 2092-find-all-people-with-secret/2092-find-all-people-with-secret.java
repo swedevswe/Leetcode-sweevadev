@@ -1,63 +1,87 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        // Sort meetings in increasing order of time
-        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
-
-        // Group Meetings in increasing order of time
-        Map<Integer, List<int[]>> sameTimeMeetings = new TreeMap<>();
-        for (int[] meeting : meetings) {
-            int x = meeting[0], y = meeting[1], t = meeting[2];
-            sameTimeMeetings.computeIfAbsent(t, k -> new ArrayList<>()).add(new int[]{x, y});
-        }
+        Arrays.sort(meetings, (a,b) -> Integer.compare(a[2], b[2]));
         
-        // Boolean Array to mark if a person knows the secret or not
-        boolean[] knowsSecret = new boolean[n];
-        knowsSecret[0] = true;
-        knowsSecret[firstPerson] = true;
-
-        // Process in increasing order of time
-        for (int t : sameTimeMeetings.keySet()) {
-            // For each person, save all the people whom he/she meets at time t
-            Map<Integer, List<Integer>> meet = new HashMap<>();
-            for (int[] meeting : sameTimeMeetings.get(t)) {
-                int x = meeting[0], y = meeting[1];
-                meet.computeIfAbsent(x, k -> new ArrayList<>()).add(y);
-                meet.computeIfAbsent(y, k -> new ArrayList<>()).add(x);
+        UnionFind uf = new UnionFind(n);
+        uf.union(0, firstPerson);
+     
+        List<int[]> currentMeetings = new ArrayList<>();
+        int i = 0;
+        while(i<meetings.length){
+            int currentTime = meetings[i][2];
+            currentMeetings.clear();
+            
+        while(i<meetings.length && meetings[i][2]==currentTime){
+            currentMeetings.add(meetings[i]);
+            i++;
+        }
+            for(int[] meeting : currentMeetings){
+                uf.union(meeting[0], meeting[1]);
             }
-
-            // Start traversal from those who already know the secret at time t
-            // Set to avoid redundancy
-            Set<Integer> start = new HashSet<>();
-            for (int[] meeting : sameTimeMeetings.get(t)) {
-                int x = meeting[0], y = meeting[1];
-                if (knowsSecret[x]) {
-                    start.add(x);
+            Set<Integer> participants = new HashSet<>();
+            for(int[] meeting : currentMeetings){
+                if(uf.connected(meeting[0], 0)){
+                    participants.add(meeting[0]);
+                }if(uf.connected(meeting[1],0)){
+                    participants.add(meeting[1]);
                 }
-                if (knowsSecret[y]) {
-                    start.add(y);
-                }
+            }
+            for(int[] meeting : currentMeetings){
+                if(!participants.contains(meeting[0])) uf.reset(meeting[0]);
+                if(!participants.contains(meeting[1])) uf.reset(meeting[1]);
+                
+            }
+            for(int participant : participants){
+                uf.union(0, participant);
             }
             
-            // Do BFS
-            Queue<Integer> q = new LinkedList<>(start);
-            while (!q.isEmpty()) {
-                int person = q.poll();
-                for (int nextPerson : meet.getOrDefault(person, new ArrayList<>())) {
-                    if (!knowsSecret[nextPerson]) {
-                        knowsSecret[nextPerson] = true;
-                        q.offer(nextPerson);
-                    }
-                }
-            }
         }
-        
-        // List of people who know the secret
         List<Integer> ans = new ArrayList<>();
-        for (int i = 0; i < n; ++i) {
-            if (knowsSecret[i]) {
-                ans.add(i);
+       for( int j = 0; j<n; j++){
+           if(uf.connected(j,0)){
+               ans.add(j);
+           }
+       }
+        return ans;
+    }
+    class UnionFind{
+        int[] parent;
+        int[] rank;
+    public UnionFind(int size){
+        parent = new int[size];
+        rank = new int[size];
+        for(int i=0; i<size; i++){
+            parent[i] = i;
+            rank[i] = 0;
+            
+        }
+    }
+    public int find(int x){
+        if(parent[x] != x){
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+    public void union(int x, int y){
+        int rootX = find(x);
+        int rootY = find(y);
+        if(rootX != rootY){
+            if(rank[rootX] > rank[rootY]){
+                parent[rootY] = rootX;
+            }else if(rank[rootX] < rank[rootY]){
+                parent[rootX] = rootY;
+            }else{
+                parent[rootY] = rootX;
+                rank[rootX]++;
             }
         }
-        return ans;
+    }
+    public boolean connected(int x, int y){
+        return find(x) == find(y);
+    }
+    public void reset(int x){
+        parent[x] = x;
+        rank[x] = 0;
+    }
     }
 }
