@@ -4,7 +4,7 @@ class Solution {
         
         for(int[] relation : trust){
             trustCount[relation[0]]--;
-            trustCount[relation[1]]++;   
+            trustCount[relation[1]]++;
         }
         for(int i = 1; i<=n; i++){
             if(trustCount[i] == n-1){
