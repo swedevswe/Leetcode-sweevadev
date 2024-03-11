@@ -3,24 +3,20 @@ class Solution {
         int[] count = new int[26];
         for(char c : s.toCharArray()){
             count[c - 'a']++;
-            
         }
-        
         StringBuilder result = new StringBuilder();
         for(char c : order.toCharArray()){
-            while(count[c-'a'] > 0){
+            while(count[c - 'a']>0){
                 result.append(c);
-                count[c-'a']--;
-                
+                count[c - 'a']--;
             }
         }
-        for(char c = 'a'; c<='z'; c++){
+        for(char c = 'a'; c<= 'z'; c++){
             while(count[c-'a']>0){
                 result.append(c);
                 count[c-'a']--;
             }
         }
         return result.toString();
-        
     }
 }
