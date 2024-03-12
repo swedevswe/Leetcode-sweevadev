@@ -14,15 +14,16 @@ class Solution {
         
         ListNode dummy = new ListNode(0);
         dummy.next = head;
+        
         HashMap<Integer, ListNode> prefixSumToNode = new HashMap<>();
         int sum = 0;
-        for(ListNode node = dummy; node!=null; node = node.next){
-            sum = sum + node.val;
+        for(ListNode node = dummy; node!=null; node=node.next){
+            sum += node.val;
             prefixSumToNode.put(sum, node);
         }
-        sum = 0;
-        for(ListNode node = dummy; node!=null; node=node.next){
-            sum = sum + node.val;
+        sum =0;
+        for(ListNode node = dummy; node!= null; node=node.next){
+            sum+=node.val;
             node.next = prefixSumToNode.get(sum).next;
         }
         return dummy.next;
