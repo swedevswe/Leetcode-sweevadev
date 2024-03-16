@@ -1,31 +1,24 @@
 class Solution {
-    private boolean diffArrayEqual(int[] a, int[] b){
-            if(a.length!=b.length) return false;
-            for(int i = 0; i<a.length; i++){
-                if(a[i]!=b[i]) return false;
-            }
-            return true;
-        }
     public String oddString(String[] words) {
-        int[][] diffs = new int[words.length][];
-        
-        for(int w = 0; w<words.length; w++){
-            int n = words[w].length();
-            diffs[w] = new int[n-1];
-            for(int i = 0; i<n-1; i++){
-                diffs[w][i] = words[w].charAt(i+1) - words[w].charAt(i);
+        int[][] matrix = new int[words.length][words[0].length()];
+        for(int i = 0; i<words.length; i++){
+            String word = words[i];
+            for(int j = 0; j<word.length()-1; j++){
+                matrix[i][j] = word.charAt(j+1) - word.charAt(j);
             }
         }
-    
-        for(int i = 0; i<words.length; i++){
-            boolean isOdd = true;
-            for(int j = 0; j<words.length; j++){
-                if(i!=j && diffArrayEqual(diffs[i], diffs[j])){
-                    isOdd = false;
-                    break;
-                }
+        for(int i = 1; i<matrix.length-1; i++){
+            int[] prev = matrix[i-1], cur = matrix[i], next = matrix[i+1];
+            
+            if(Arrays.equals(prev, cur) && !Arrays.equals(cur, next)){
+                return words[i+1];
             }
-            if(isOdd) return words[i];
+             if(Arrays.equals(cur, next) && !Arrays.equals(cur, prev)){
+                return words[i-1];
+            }
+             if(Arrays.equals(prev, next) && !Arrays.equals(cur, prev)){
+                return words[i];
+            }
         }
         return "";
     }
