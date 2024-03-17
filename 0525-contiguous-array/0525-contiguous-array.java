@@ -8,15 +8,16 @@ class Solution {
         
         for(int i = 0; i<nums.length; i++){
             if(nums[i]==0){
-                count = count + 1;
+                count += 1;
             }else{
-                count = count + -1;
+                count += -1;
             }
             if(map.containsKey(count)){
                 max_length = Math.max(max_length, i-map.get(count));
             }else{
                 map.put(count, i);
             }
+            
         }
         return max_length;
     }
