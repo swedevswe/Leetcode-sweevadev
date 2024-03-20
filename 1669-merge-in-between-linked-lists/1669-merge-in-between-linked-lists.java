@@ -10,6 +10,9 @@
  */
 class Solution {
     public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+       
+        //NBA = Node Before A, NAB = Node After B, LNOL2 = Last Node of List2 !!!
+        
         ListNode NBA = list1;
         for(int i = 0; i<a-1; i++){
             NBA = NBA.next;
