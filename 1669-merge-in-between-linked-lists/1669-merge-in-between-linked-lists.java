@@ -20,11 +20,11 @@ class Solution {
         }
         NBA.next = list2; 
         
-        ListNode lNl2 = list2;
-        while(lNl2.next!=null){
-            lNl2 = lNl2.next;
+        ListNode LNOL2 = list2;
+        while(LNOL2.next!=null){
+            LNOL2 = LNOL2.next;
         }
-        lNl2.next = NAB;
+        LNOL2.next = NAB;
         return list1;
     }
 }
