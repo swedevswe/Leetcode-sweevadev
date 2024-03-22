@@ -13,7 +13,7 @@ class Solution {
         if(head==null) return false;
         
         ListNode fast = head, slow = head;
-        while(fast != null && fast.next != null){
+        while(fast!=null && fast.next!=null){
             fast = fast.next.next;
             slow = slow.next;
         }
@@ -21,22 +21,24 @@ class Solution {
         slow = reverseList(slow);
         fast = head;
         
-        while(slow != null){
-            if(fast.val != slow.val){
+        while(slow!=null){
+            if(fast.val!=slow.val){
                 return false;
             }
             fast = fast.next;
             slow = slow.next;
+            
         }
         return true;
+        
     }
     private ListNode reverseList(ListNode head){
         ListNode prev = null;
-        while(head != null){
-            ListNode nextNode = head.next;
+        while(head!=null){
+            ListNode next = head.next;
             head.next = prev;
             prev = head;
-            head = nextNode;
+            head = next;
         }
         return prev;
     }
