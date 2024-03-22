@@ -26,5 +26,6 @@ class Solution {
         }
         lastNodeOfList2.next = nodeAfterB;
         return list1;
+        
     }
 }
