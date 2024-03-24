@@ -4,7 +4,7 @@ class Solution {
         for(int num : nums){
             if(map.containsKey(num)){
                 return num;
-            }map.put(num, 1);
+            }map.put(num, 0);
         }
         return -1;
     }
