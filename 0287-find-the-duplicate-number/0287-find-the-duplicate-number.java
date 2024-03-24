@@ -12,6 +12,6 @@ class Solution {
                          i = nums[i];
                          j = nums[j];
                      }
-                     return j;
+                     return i;
     }
 }
