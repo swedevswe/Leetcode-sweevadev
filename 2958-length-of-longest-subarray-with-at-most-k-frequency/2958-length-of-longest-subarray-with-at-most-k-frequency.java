@@ -13,9 +13,8 @@ class Solution {
                 }
                 left++;
             }
-             maxLen = Math.max(maxLen, right - left + 1);
+            maxLen = Math.max(maxLen, right - left + 1);
         }
         return maxLen;
     }
-   
 }
