@@ -1,17 +1,20 @@
 class Solution {
     public long countSubarrays(int[] nums, int k) {
         int maxLen = Arrays.stream(nums).max().getAsInt();
-        List<Integer> indexOfMaxElement = new ArrayList<>();
         long ans = 0;
+        int left = 0, maxLenInWindow = 0;
         
-        for(int i = 0; i<nums.length; i++){
-            if(nums[i]==maxLen){
-                indexOfMaxElement.add(i);
+        for(int right = 0; right<nums.length; right++){
+            if(nums[right]==maxLen){
+                maxLenInWindow++;
             }
-            int freq = indexOfMaxElement.size();
-            if(freq>=k){
-                ans = ans + indexOfMaxElement.get(freq-k)+1;
+            while(k==maxLenInWindow){
+                if(nums[left]==maxLen){
+                    maxLenInWindow--;
+                }
+                left++;
             }
+            ans = ans + left;
         }
         return ans;
     }
