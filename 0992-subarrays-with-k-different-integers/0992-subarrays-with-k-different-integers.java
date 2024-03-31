@@ -1,6 +1,6 @@
 class Solution {
     public int subarraysWithKDistinct(int[] nums, int k) {
-        return atMostKDistinct(nums, k) - atMostKDistinct(nums, k -1);
+        return atMostKDistinct(nums, k) - atMostKDistinct(nums, k - 1);
     }
     private int atMostKDistinct(int[] nums, int k){
         Map<Integer, Integer> count = new HashMap<>();
