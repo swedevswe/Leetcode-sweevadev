@@ -1,8 +1,8 @@
 class Solution {
     public int subarraysWithKDistinct(int[] nums, int k) {
-       return goodSubArray(nums, k) - goodSubArray(nums, k - 1); 
+        return goodSubArrays(nums, k) - goodSubArrays(nums, k -1);
     }
-    private int goodSubArray(int[]nums, int k){
+    private int goodSubArrays(int[] nums, int k){
         Map<Integer, Integer> freq = new HashMap<>();
         int ans = 0;
         int left = 0;
@@ -13,7 +13,7 @@ class Solution {
                 if(freq.get(nums[left])==0){
                     freq.remove(nums[left]);
                 }
-                left++;
+                    left++;
                 
             }
             ans = ans + right - left + 1;
