@@ -1,20 +1,24 @@
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        Map<Character, Character> charCount = new HashMap<>();
+        if(s.length()!=t.length()) return false;
         
-        char c = 'a';
+        int[] mapS = new int[256];
+        int[] mapT = new int[256];
+        
+        for(int i = 0; i<256; i++){
+            mapS[i] = -1;
+            mapT[i] = -1;
+        }
         
         for(int i = 0; i<s.length(); i++){
-            if(charCount.containsKey(s.charAt(i))){
-                c= charCount.get(s.charAt(i));
-                if(c!=t.charAt(i))
-                    return false;
-            }else if(!charCount.containsValue(t.charAt(i))){
-                charCount.put(s.charAt(i),t.charAt(i));
-            }
-            else{
+            char c1 = s.charAt(i);
+            char c2 = t.charAt(i);
+            
+            if(mapS[c1] != -1 && mapS[c1] != c2 || mapT[c2] != -1 && mapT[c2] != c1){
                 return false;
             }
+            mapS[c1] = c2;
+            mapT[c2] = c1;
         }
         return true;
     }
