@@ -12,12 +12,12 @@ class Solution {
             }
             sb.append(c);
         }
-        
         StringBuilder result = new StringBuilder();
         for(int i = sb.length()-1; i>=0; i--){
             if(sb.charAt(i)=='(' && open-- > 0) continue;
             result.append(sb.charAt(i));
         }
         return result.reverse().toString();
+        
     }
 }
