@@ -7,7 +7,6 @@ class Solution {
             low = Math.max(low, 0);
             
             high += (c==')') ? -1 : 1;
-            
             if(high<0) return false;
         }
         return low == 0;
