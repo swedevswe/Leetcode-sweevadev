@@ -8,16 +8,15 @@ class Solution {
         int i = 0;
         int studentsInLine = students.length;
         
-        while(i < sandwiches.length){
+        while(i<sandwiches.length){
             if(count[sandwiches[i]]>0){
-            count[sandwiches[i]]--;
-            studentsInLine--;
-            i++;
-        }else{
-            break;
+                count[sandwiches[i]]--;
+                studentsInLine--;
+                i++;
+            }else{
+                break;
+            }
         }
-        }
-        
         return studentsInLine;
     }
 }
