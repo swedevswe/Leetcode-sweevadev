@@ -1,6 +1,6 @@
 class Solution {
     public int countStudents(int[] students, int[] sandwiches) {
-        int[] count = {0, 0};
+        int[] count = {0,0};
         
         for(int student : students){
             count[student]++;
