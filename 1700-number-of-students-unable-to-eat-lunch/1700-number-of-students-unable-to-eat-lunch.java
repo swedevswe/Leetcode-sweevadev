@@ -5,6 +5,7 @@ class Solution {
         for(int student : students){
             count[student]++;
         }
+        
         int i = 0;
         int studentsInLine = students.length;
         
