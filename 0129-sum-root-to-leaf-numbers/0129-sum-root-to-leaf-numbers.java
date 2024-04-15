@@ -23,7 +23,7 @@ class Solution {
         }
         currentNumber = currentNumber * 10 + node.val;
         
-        if(node.left == null && node.right == null){
+        if(node.left==null && node.right==null){
             return currentNumber;
         }
         return dfs(node.left, currentNumber) + dfs(node.right, currentNumber);
