@@ -22,13 +22,12 @@ class Solution {
         }
         insert(root, val, 1, depth);
         return root;
-        
     }
     private void insert(TreeNode node, int val, int currDepth, int targetDepth){
         if(node==null){
             return;
         }
-        if(currDepth == targetDepth-1){
+        if(currDepth==targetDepth-1){
             TreeNode newLeft = new TreeNode(val);
             TreeNode newRight = new TreeNode(val);
             
@@ -37,9 +36,11 @@ class Solution {
             
             node.left = newLeft;
             node.right = newRight;
+            
         }else{
-            insert(node.left, val, currDepth + 1, targetDepth);
-            insert(node.right, val, currDepth + 1, targetDepth);
+            insert(node.left, val, currDepth+1, targetDepth);
+            insert(node.right, val, currDepth+1, targetDepth);
+            
         }
     }
 }
