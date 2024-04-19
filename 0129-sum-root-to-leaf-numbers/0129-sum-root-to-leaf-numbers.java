@@ -22,7 +22,6 @@ class Solution {
             return 0;
         }
         currentNumber = currentNumber * 10 + node.val;
-        
         if(node.left==null && node.right==null){
             return currentNumber;
         }
