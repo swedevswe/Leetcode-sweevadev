@@ -1,11 +1,9 @@
 class Solution {
     public int[][] findFarmland(int[][] land) {
-        
         List<int[]> result = new ArrayList<>();
-        int m = land.length, n = land[0].length;
-        
+        int m = land.length; int n = land[0].length;
         boolean[][] visited = new boolean[m][n];
-      
+        
         for(int i = 0; i<m; i++){
             for(int j = 0; j<n; j++){
                 if(land[i][j]==1 && !visited[i][j]){
@@ -16,9 +14,8 @@ class Solution {
             }
         }
         return result.toArray(new int[result.size()][]);
-        
     }
-    private void dfs(int[][] land, int i, int j, boolean[][]visited, int[] bounds){
+    private void dfs(int[][] land, int i, int j, boolean[][] visited, int[] bounds){
         int m = land.length, n = land[0].length;
         
         if(i<0 || i>=m || j<0 || j>=n || visited[i][j] || land[i][j]==0){
@@ -32,7 +29,7 @@ class Solution {
         bounds[3] = Math.max(bounds[3], j);
         
         dfs(land, i+1, j, visited, bounds);
-        dfs(land, i-1, j, visited, bounds);
+        dfs(land, i, j, visited, bounds);
         dfs(land, i, j+1, visited, bounds);
         dfs(land, i, j-1, visited, bounds);
     }
