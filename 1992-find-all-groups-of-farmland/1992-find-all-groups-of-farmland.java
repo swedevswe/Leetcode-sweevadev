@@ -3,12 +3,13 @@ class Solution {
         
         List<int[]> result = new ArrayList<>();
         int m = land.length, n = land[0].length;
-         boolean[][] visited = new boolean[m][n];
         
+        boolean[][] visited = new boolean[m][n];
+      
         for(int i = 0; i<m; i++){
-            for(int j=0; j<n; j++){
+            for(int j = 0; j<n; j++){
                 if(land[i][j]==1 && !visited[i][j]){
-                    int[] bounds = {i, j, i, j};
+                    int[] bounds = {i,j,i,j};
                     dfs(land, i, j, visited, bounds);
                     result.add(new int[] {bounds[0], bounds[1], bounds[2], bounds[3]});
                 }
@@ -16,11 +17,10 @@ class Solution {
         }
         return result.toArray(new int[result.size()][]);
         
-        
-        
     }
-    private void dfs(int[][] land, int i, int j, boolean[][] visited, int[] bounds){
+    private void dfs(int[][] land, int i, int j, boolean[][]visited, int[] bounds){
         int m = land.length, n = land[0].length;
+        
         if(i<0 || i>=m || j<0 || j>=n || visited[i][j] || land[i][j]==0){
             return;
         }
