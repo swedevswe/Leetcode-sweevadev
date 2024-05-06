@@ -22,17 +22,17 @@ class Solution {
         
         while(!queue.isEmpty()){
             int current = queue.poll();
-            
-            for(int neighbour : graph.get(current)){
-                if(neighbour == destination){
-                    return true;
-                }
-                if(!visited[neighbour]){
-                    visited[neighbour] = true;
-                    queue.add(neighbour);
-                }
+        
+        for(int neighbour : graph.get(current)){
+            if(neighbour==destination){
+                return true;
+            }
+            if(!visited[neighbour]){
+                visited[neighbour] = true;
+                queue.add(neighbour);
             }
         }
+    }
         return false;
     }
 }
