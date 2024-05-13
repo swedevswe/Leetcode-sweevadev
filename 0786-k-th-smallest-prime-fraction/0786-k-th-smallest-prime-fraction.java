@@ -1,45 +1,23 @@
 class Solution {
     public int[] kthSmallestPrimeFraction(int[] arr, int k) {
-        int n = arr.length;
-        double left = 0;
-        double right = 1.0;
+        PriorityQueue<double[]> pq = new PriorityQueue<>((a,b) -> Double.compare(b[0], a[0]));
         
-        
-        while(left<right){
-            double mid = (left + right) / 2;
-        
-        double maxFraction = 0.0;
-        int totalSmallFractions = 0, numeratorIdx = 0, denominatorIdx = 0;
-        
-        int j = 1;
-        
-        for(int i = 0; i<n-1; i++){
-            while(j < n && arr[i] >= mid * arr[j]){
-                j++;
-            }
-            
-            totalSmallFractions += (n-j);
-            
-            if(j==n) break;
-            
-            double fraction = (double) arr[i] / arr[j];
-            
-            if(fraction > maxFraction){
-                numeratorIdx = i;
-                denominatorIdx = j;
-                maxFraction = fraction;
-            }
+        for(int i = 0; i<arr.length; i++){
+            pq.offer(new double[]{
+                -1.0 * arr[i] / arr[arr.length-1], i, arr.length - 1});
         }
         
-        if(totalSmallFractions == k){
-            return new int[]{arr[numeratorIdx], arr[denominatorIdx]};
-        }else if(totalSmallFractions > k){
-            right = mid;
-        }else{
-            left = mid;
+        while(--k > 0){
+            double[] cur = pq.poll();
+            int numeratorIdx = (int) cur[1];
+            int denominatorIdx = (int) cur[2] - 1;
+            if(denominatorIdx > numeratorIdx){
+                pq.offer(new double[]{
+                    -1.0 * arr[numeratorIdx] / arr[denominatorIdx], numeratorIdx, denominatorIdx
+                });
+            }
         }
-        
+        double[] result = pq.poll();
+        return new int[]{arr[(int) result[1]], arr[(int) result[2]]};
     }
-    return new int[]{};
-}
 }
