@@ -8,26 +8,26 @@ class Solution {
             mid = low + (high - low) / 2;
             int count = 0, i = 0;
             double maxFraction = 0.0;
+        for(int j = 1; j<arr.length; j++){
+            while(i<j && arr[i] < mid * arr[j]){
+                i++;
+            }
+            count += i;
             
-            for(int j = 0; j<arr.length; j++){
-                while(i<j && arr[i] < mid * arr[j]){
-                    i++;
-                }
-                count += i;
-                
-                if(i>0){
-                    double f = (double) arr[i-1] / arr[j];
-                    if(f > maxFraction){
-                        maxFraction = f;
-                        ans[0] = arr[i-1];
-                        ans[1] = arr[j];
-                    }
+            if(i>0){
+                double f = (double) arr[i-1] / arr[j];
+                if(f > maxFraction){
+                    maxFraction = f;
+                    ans[0] = arr[i-1];
+                    ans[1] = arr[j];
                 }
             }
-            if(count==k){
+        }
+            if(count == k){
                 return ans;
             }else if(count < k){
                 low = mid;
+                
             }else{
                 high = mid;
             }
