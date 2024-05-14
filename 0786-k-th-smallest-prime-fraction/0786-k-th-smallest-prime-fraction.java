@@ -13,7 +13,7 @@ class Solution {
                 while(i<j && arr[i] < mid * arr[j]){
                     i++;
                 }
-                count = count + i;
+                count += i;
                 
                 if(i>0){
                     double f = (double) arr[i-1] / arr[j];
@@ -24,7 +24,7 @@ class Solution {
                     }
                 }
             }
-            if(count == k){
+            if(count==k){
                 return ans;
             }else if(count < k){
                 low = mid;
