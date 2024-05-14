@@ -4,7 +4,7 @@ class Solution {
         
         int[] ans = new int[2];
         
-        while(high - low > 1e-9){
+       while(high - low > 1e-9){
             mid = low + (high - low) / 2;
             int count = 0, i = 0;
             double maxFraction = 0.0;
@@ -14,8 +14,7 @@ class Solution {
                     i++;
                 }
                 count = count + i;
-        
-               
+                
                 if(i>0){
                     double f = (double) arr[i-1] / arr[j];
                     if(f > maxFraction){
