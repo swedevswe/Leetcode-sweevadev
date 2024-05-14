@@ -4,16 +4,16 @@ class Solution {
         
         int[] ans = new int[2];
         
-       while(high - low > 1e-9){
+        while(high - low > 1e-9){
             mid = low + (high - low) / 2;
             int count = 0, i = 0;
             double maxFraction = 0.0;
             
-            for(int j = 1; j<arr.length; j++){
+            for(int j = 0; j<arr.length; j++){
                 while(i<j && arr[i] < mid * arr[j]){
                     i++;
                 }
-                count = count + i;
+                count += i;
                 
                 if(i>0){
                     double f = (double) arr[i-1] / arr[j];
