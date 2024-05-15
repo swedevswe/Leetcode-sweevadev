@@ -24,7 +24,7 @@ class Solution {
                     }
                 }
             }
-            if(count==k){
+            if(count == k){
                 return ans;
             }else if(count < k){
                 low = mid;
