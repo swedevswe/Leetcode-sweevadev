@@ -4,9 +4,9 @@ class Solution {
         
         int[][] distance = new int[n][n];
         for(int[] row : distance) Arrays.fill(row, Integer.MAX_VALUE);
+        
         int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
         
-     
         Queue<int[]> queue = new LinkedList<>();
         
         for(int r = 0; r<n; r++){
@@ -22,15 +22,18 @@ class Solution {
             int x = cell[0], y = cell[1];
             for(int[] dir : directions){
                 int nx = x + dir[0], ny = y + dir[1];
-                if(nx >= 0 && nx < n && ny >= 0 && ny < n && distance[nx][ny] == Integer.MAX_VALUE){
+                if(nx >= 0 && nx < n && ny >= 0 && ny < n && distance[nx][ny]==Integer.MAX_VALUE){
                     distance[nx][ny] = distance[x][y] + 1;
                     queue.offer(new int[]{nx, ny});
+                    
                 }
+                
             }
         }
-        int low = 0, high = n - 1;
+        
+        int low = 0, high = n-1;
         while(low <= high){
-            int mid = (low + high) / 2;
+            int mid = (low+high)/2;
             if(canReachSafenessFactor(distance, n, directions, mid)){
                 low = mid + 1;
             }else{
@@ -38,10 +41,6 @@ class Solution {
             }
         }
         return high;
-        
-        
-        
-        
     }
     private boolean canReachSafenessFactor(int[][] distance, int n, int[][] directions, int safenessFactor){
         if(distance[0][0] < safenessFactor) return false;
@@ -58,9 +57,9 @@ class Solution {
             
             for(int[] dir : directions){
                 int nx = x + dir[0], ny = y + dir[1];
-                if(nx >= 0 && nx < n && ny >=0 && ny < n && !visited[nx][ny] && distance[nx][ny] >= safenessFactor){
+                if(nx >= 0 && nx < n && ny >= 0 && ny < n && !visited[nx][ny] && distance[nx][ny] >= safenessFactor){
                     visited[nx][ny] = true;
-                    queue.offer(new int[]{nx,ny});
+                    queue.offer(new int[]{nx, ny});
                 }
                 
             }
