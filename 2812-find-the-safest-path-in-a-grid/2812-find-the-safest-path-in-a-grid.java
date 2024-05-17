@@ -9,12 +9,13 @@ class Solution {
         int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
         
         Queue<int[]> queue = new LinkedList<>();
-        for(int r = 0; r < n; r++){
-            for(int c = 0; c < n; c++){
+        for(int r = 0; r<n; r++){
+            for(int c = 0; c<n; c++){
                 if(grid.get(r).get(c)==1){
-                    queue.offer(new int[]{r,c});
                     distance[r][c] = 0;
+                    queue.offer(new int[]{r,c});
                 }
+                
             }
         }
         while(!queue.isEmpty()){
@@ -22,10 +23,11 @@ class Solution {
             int x = cell[0], y = cell[1];
             for(int[] dir : directions){
                 int nx = x + dir[0], ny = y + dir[1];
-                if(nx >= 0 && nx < n && ny >= 0 && ny < n && distance[nx][ny] == Integer.MAX_VALUE){
+                if(nx>=0 && nx<n && ny>=0 && ny<n && distance[nx][ny] == Integer.MAX_VALUE){
                     distance[nx][ny] = distance[x][y] + 1;
                     queue.offer(new int[]{nx, ny});
-                } 
+                    
+                }
             }
         }
         int low = 0, high = n - 1;
@@ -44,24 +46,24 @@ class Solution {
         
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[]{0,0});
+        
         boolean[][] visited = new boolean[n][n];
         visited[0][0] = true;
-        
         
         while(!queue.isEmpty()){
             int[] cell = queue.poll();
             int x = cell[0], y = cell[1];
-            if(x==n-1 && y==n-1) return true;
+            if(x==n-1 && y == n-1) return true;
             
             for(int[] dir : directions){
                 int nx = x + dir[0], ny = y + dir[1];
-                if(nx >= 0 && nx < n && ny >= 0 && ny < n && !visited[nx][ny] && distance[nx][ny] >= safenessFactor){
+                if(nx >= 0 && nx < n && ny >= 0 && ny<n && !visited[nx][ny] && distance[nx][ny] >= safenessFactor){
                     visited[nx][ny] = true;
                     queue.offer(new int[]{nx, ny});
                 }
             }
-            
         }
         return false;
+    
     }
 }
