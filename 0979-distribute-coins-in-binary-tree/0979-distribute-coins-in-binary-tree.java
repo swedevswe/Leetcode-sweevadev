@@ -22,11 +22,10 @@ class Solution {
     }
     private int postOrder(TreeNode node){
         if(node==null) return 0;
-        
         int leftBalance = postOrder(node.left);
         int rightBalance = postOrder(node.right);
         
-        moves += Math.abs(leftBalance) + Math.abs(rightBalance);
+        moves = moves + Math.abs(leftBalance) + Math.abs(rightBalance);
         
         return node.val + leftBalance + rightBalance - 1;
     }
