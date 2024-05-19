@@ -1,27 +1,31 @@
 class Solution {
     public long maximumValueSum(int[] nums, int k, int[][] edges) {
-        long sum = 0;
-        int count = 0, positiveMinimum = (1 << 30), negativeMaximum = -1 * (1 << 30);
+        long totalSum = 0;
+        long totalGain = 0;
+        int minPositiveGain = Integer.MAX_VALUE;
+        int maxNegativeGain = Integer.MIN_VALUE;
+        int positiveCount = 0;
 
-        for (int nodeValue : nums) {
-            int operatedNodeValue = nodeValue ^ k;
-            sum += nodeValue;
-            int netChange = operatedNodeValue - nodeValue;
-            if (netChange > 0) {
-                positiveMinimum = Math.min(positiveMinimum, netChange);
-                sum += netChange;
-                count++;
+        for (int num : nums) {
+            int xorValue = num ^ k;
+            int gain = xorValue - num;
+            totalSum += num;
+
+            if (gain > 0) {
+                totalGain += gain;
+                minPositiveGain = Math.min(minPositiveGain, gain);
+                positiveCount++;
             } else {
-                negativeMaximum = Math.max(negativeMaximum, netChange);
+                maxNegativeGain = Math.max(maxNegativeGain, gain);
             }
         }
 
-        // If the number of positive netChange values is even, return the sum.
-        if (count % 2 == 0) {
-            return sum;
+        // If the number of positive gains is even, return the total sum with all gains.
+        if (positiveCount % 2 == 0) {
+            return totalSum + totalGain;
         }
 
-        // Otherwise return the maximum of both discussed cases.
-        return Math.max(sum - positiveMinimum, sum + negativeMaximum);
+        // If the number of positive gains is odd, we adjust by removing the smallest positive gain or adding the largest negative gain.
+        return Math.max(totalSum + totalGain - minPositiveGain, totalSum + totalGain + maxNegativeGain);
     }
 }
