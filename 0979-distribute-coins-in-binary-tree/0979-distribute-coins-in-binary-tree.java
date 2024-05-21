@@ -14,19 +14,21 @@
  * }
  */
 class Solution {
-    private int moves;
+    int moves;
     public int distributeCoins(TreeNode root) {
         moves = 0;
         postOrder(root);
         return moves;
+    
+        
     }
     private int postOrder(TreeNode node){
         if(node==null) return 0;
         int leftBalance = postOrder(node.left);
         int rightBalance = postOrder(node.right);
         
-        moves = moves + Math.abs(leftBalance) + Math.abs(rightBalance);
+        moves += Math.abs(leftBalance) + Math.abs(rightBalance);
         
         return node.val + leftBalance + rightBalance - 1;
-    }
+        }
 }
