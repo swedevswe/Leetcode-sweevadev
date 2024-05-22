@@ -12,7 +12,7 @@ class Solution {
             int gain = xorVal - num;
             totalGain += num;
             
-            if(gain>0){
+            if(gain > 0){
                 positiveCount++;
                 totalGain += gain;
                 minPositiveGain = Math.min(minPositiveGain, gain);
