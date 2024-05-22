@@ -19,7 +19,6 @@ class Solution {
         moves = 0;
         postOrder(root);
         return moves;
-        
     }
     private int postOrder(TreeNode node){
         if(node==null) return 0;
