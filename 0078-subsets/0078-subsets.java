@@ -4,8 +4,6 @@ class Solution {
         
         backtrack(result, new ArrayList<>(), nums, 0);
         return result;
-        
-        
     }
     private void backtrack(List<List<Integer>> result, List<Integer> current, int[] nums, int start){
         result.add(new ArrayList<>(current));
@@ -18,5 +16,4 @@ class Solution {
             current.remove(current.size()-1);
         }
     }
-    
 }
