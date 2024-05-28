@@ -3,28 +3,33 @@ class Solution {
         int m = s.length();
         int n = p.length();
         
-        boolean[][] dp = new boolean[m+1][n+1];
+        int sPointer = 0, pPointer = 0;
         
-        dp[0][0] = true;
+        int starIndex = -1, sTempIndex = -1;
         
-        
-        for(int j = 1; j <= n; j++){
-            if(p.charAt(j-1) == '*'){
-                dp[0][j] = dp[0][j-1];
+        while(sPointer < m){
+            if(pPointer < n && (p.charAt(pPointer) == s.charAt(sPointer) || p.charAt(pPointer) == '?')){
+                sPointer++;
+                pPointer++;
+            }
+            else if(pPointer < n && p.charAt(pPointer) == '*') {
+                starIndex = pPointer;
+                sTempIndex = sPointer;
+                pPointer++;
+            }
+            else if(starIndex != -1){
+                pPointer = starIndex + 1;
+                sTempIndex++;
+                sPointer = sTempIndex;
+            }
+            else{
+                return false;
             }
         }
-        for(int i = 1; i<= m; i++){
-            for(int j = 1; j<= n; j++){
-                if(p.charAt(j-1)==s.charAt(i-1) || p.charAt(j-1)=='?'){
-                    dp[i][j] = dp[i-1][j-1];
-                }else if(p.charAt(j-1)=='*'){
-                    dp[i][j] = dp[i-1][j] || dp[i][j-1];
-                }else{
-                    dp[i][j] = false;
-                }
-            }
+        while(pPointer < n && p.charAt(pPointer) == '*'){
+            pPointer++;
         }
-        return dp[m][n];
+        return pPointer == n;
         
         
     }
