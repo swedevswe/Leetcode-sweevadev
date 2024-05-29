@@ -3,18 +3,18 @@ class Solution {
         List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         
-        backtrack(result, nums, new ArrayList<>(), 0);
-        return result;
-    }
-    private void backtrack(List<List<Integer>> result, int[] nums, List<Integer> current, int start){
-        result.add(new ArrayList<>(current));
+        int n = nums.length;
+        int totalSubsets = 1 << n;
         
-        for(int i = start; i<nums.length; i++){
-            current.add(nums[i]);
-            
-            backtrack(result, nums, current, i + 1);
-            
-            current.remove(current.size()-1);
+        for(int i = 0; i<totalSubsets; i++){
+            List<Integer> currentSubset = new ArrayList<>();
+            for(int j = 0; j<n; j++){
+                if((i & (1<<j))!=0){
+                    currentSubset.add(nums[j]);
+                }
+            }
+            result.add(currentSubset);
         }
+        return result;
     }
 }
