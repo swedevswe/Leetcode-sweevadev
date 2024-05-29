@@ -10,11 +10,11 @@ class Solution {
         int length = s.length();
         
         for(int i = length - 1; i>0; i--){
-            if(s.charAt(i) - '0' + carry == 1){
+            if((s.charAt(i) - '0' + carry) % 2 == 0){
+                numSteps += 1;
+            }else{
                 carry = 1;
                 numSteps += 2;
-            }else{
-                numSteps += 1;
             }
         }
         return numSteps + carry;
