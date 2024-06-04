@@ -3,10 +3,8 @@ class Solution {
         int j = 0;
         
         for(int i = 0; i<s.length(); i++){
-            if(j<t.length()){
-                if(s.charAt(i) == t.charAt(j)){
+            if(j<t.length() && s.charAt(i) == t.charAt(j)){
                     j++;
-                }
             }
         }
         return t.length()-j;
