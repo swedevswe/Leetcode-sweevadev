@@ -15,13 +15,9 @@ class Solution {
         return sb.toString().trim();
     }
     class Trie{
-        Trie[] children;
-        boolean isEndOfWord;
+        Trie[] children = new Trie[26];
+        boolean isEndOfWord = false;
         
-        Trie() {
-            children = new Trie[26];
-            isEndOfWord = false;
-        }
         void insert(String word){
             Trie node = this;
             for(char c : word.toCharArray()){
