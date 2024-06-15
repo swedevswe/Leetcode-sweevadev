@@ -4,19 +4,16 @@ class Solution {
         
         for(String word : dictionary){
             trie.insert(word);
-            
         }
         StringBuilder sb = new StringBuilder();
         String[] words = sentence.split(" ");
         
         for(String word : words){
             String root = trie.findRoot(word);
-            sb.append(root==null ? word : root).append(" ");
-            
-        }
-        return sb.toString().trim();
-        
+            sb.append(root==null ? word:root).append(" ");
     }
+        return sb.toString().trim();
+}
     class Trie{
         Trie[] children = new Trie[26];
         boolean isEndOfWord = false;
@@ -25,7 +22,7 @@ class Solution {
             Trie node = this;
             for(char c : word.toCharArray()){
                 int index = c - 'a';
-                if(node.children[index] == null){
+                if(node.children[index]==null){
                     node.children[index] = new Trie();
                 }
                 node = node.children[index];
@@ -37,7 +34,7 @@ class Solution {
             StringBuilder sb = new StringBuilder();
             for(char c : word.toCharArray()){
                 int index = c - 'a';
-                if(node.children[index] == null){
+                if(node.children[index]==null){
                     return null;
                 }
                 sb.append(c);
@@ -48,6 +45,5 @@ class Solution {
             }
             return null;
         }
-        
     }
 }
