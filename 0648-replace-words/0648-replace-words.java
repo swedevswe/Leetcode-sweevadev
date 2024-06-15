@@ -10,31 +10,31 @@ class Solution {
         
         for(String word : words){
             String root = trie.findRoot(word);
-            sb.append(root==null ? word:root).append(" ");
-    }
+            sb.append(root == null ? word : root).append(" ");
+        }
         return sb.toString().trim();
-}
+    }
     class Trie{
         Trie[] children = new Trie[26];
         boolean isEndOfWord = false;
-        
-        void insert(String word){
-            Trie node = this;
-            for(char c : word.toCharArray()){
-                int index = c - 'a';
-                if(node.children[index]==null){
-                    node.children[index] = new Trie();
-                }
-                node = node.children[index];
+    
+    void insert(String word){
+        Trie node = this;
+        for(char c : word.toCharArray()){
+            int index = c - 'a';
+            if(node.children[index] == null){
+                node.children[index] = new Trie();
             }
-            node.isEndOfWord = true;
+            node = node.children[index];
         }
+        node.isEndOfWord = true;
+    }
         String findRoot(String word){
             Trie node = this;
             StringBuilder sb = new StringBuilder();
             for(char c : word.toCharArray()){
                 int index = c - 'a';
-                if(node.children[index]==null){
+                if(node.children[index] == null){
                     return null;
                 }
                 sb.append(c);
@@ -45,5 +45,6 @@ class Solution {
             }
             return null;
         }
+        
     }
 }
