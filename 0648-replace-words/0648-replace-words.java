@@ -10,10 +10,8 @@ class Solution {
         for(String word : words){
             String root = trie.findRoot(word);
             sb.append(root == null ? word : root).append(" ");
-            
         }
         return sb.toString().trim();
-        
     }
     class Trie{
         Trie[] children = new Trie[26];
@@ -35,13 +33,14 @@ class Solution {
             StringBuilder sb = new StringBuilder();
             for(char c : word.toCharArray()){
                 int index = c - 'a';
-                if(node.children[index]==null){
+                if(node.children[index] == null){
                     return null;
                 }
                 sb.append(c);
                 node = node.children[index];
                 if(node.isEndOfWord){
                     return sb.toString();
+                    
                 }
             }
             return null;
