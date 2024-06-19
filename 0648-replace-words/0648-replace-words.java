@@ -7,6 +7,7 @@ class Solution {
         }
         StringBuilder sb = new StringBuilder();
         String[] words = sentence.split(" ");
+        
         for(String word : words){
             String root = trie.findRoot(word);
             sb.append(root == null ? word : root).append(" ");
@@ -40,7 +41,6 @@ class Solution {
                 node = node.children[index];
                 if(node.isEndOfWord){
                     return sb.toString();
-                    
                 }
             }
             return null;
