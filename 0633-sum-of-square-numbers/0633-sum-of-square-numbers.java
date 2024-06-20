@@ -1,6 +1,6 @@
 class Solution {
     public boolean judgeSquareSum(int c) {
-        for(int a = 0; a<=Math.sqrt(c); a++){
+        for(int a = 0; a<= Math.sqrt(c); a++){
             int a2 = a * a;
             int b2 = c - a2;
             if(isPerfectSquare(b2)){
