@@ -1,7 +1,5 @@
 class Solution {
     public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
-        int currUnsatCount = 0;
-        int maxUnsatCount = 0;
         
         int n = customers.length;
         int totalSatisfied = 0;
