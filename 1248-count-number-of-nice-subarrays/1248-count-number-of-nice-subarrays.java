@@ -1,6 +1,5 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
-        
         int count = 0, prefixSum = 0;
         
         HashMap<Integer, Integer> prefixCount = new HashMap<>();
