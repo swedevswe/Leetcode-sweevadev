@@ -1,6 +1,5 @@
 class Solution {
     public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
-        
         int n = customers.length;
         
         int totalSatisfied = 0;
@@ -11,7 +10,6 @@ class Solution {
             }
         }
         int potentialGain = 0;
-        
         for(int i = 0; i<minutes; i++){
             if(grumpy[i] == 1){
                 potentialGain += customers[i];
