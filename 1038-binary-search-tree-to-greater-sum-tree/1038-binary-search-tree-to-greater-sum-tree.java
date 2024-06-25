@@ -14,8 +14,10 @@
  * }
  */
 class Solution {
+    
     private int sum = 0;
     public TreeNode bstToGst(TreeNode root) {
+        
         traverseAndUpdate(root);
         return root;
     }
@@ -28,6 +30,6 @@ class Solution {
         node.val = sum;
         
         traverseAndUpdate(node.left);
+        
     }
-    
 }
