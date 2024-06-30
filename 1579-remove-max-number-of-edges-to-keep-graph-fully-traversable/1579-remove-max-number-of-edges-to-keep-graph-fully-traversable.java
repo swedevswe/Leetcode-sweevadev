@@ -9,6 +9,11 @@ class Solution {
         //perform union operations = union the nodes for each type of edge. // the core step of the problem
         //checking the connections for fully connected edges for both Alice and Bob
         //returning max number of redundant edges that were found
+        //under class UnionFind :
+        //parent, rank, count
+        //boolean union = u, v, rootU, rootV, find
+        //int find
+        //boolean isConnected
         
         UnionFind aliceUF = new UnionFind(n);
         UnionFind bobUF = new UnionFind(n);
