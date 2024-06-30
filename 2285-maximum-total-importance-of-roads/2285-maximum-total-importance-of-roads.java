@@ -1,5 +1,6 @@
 class Solution {
     public long maximumImportance(int n, int[][] roads) {
+        
         int[] degree = new int[n];
         for(int[] road : roads){
             degree[road[0]]++;
