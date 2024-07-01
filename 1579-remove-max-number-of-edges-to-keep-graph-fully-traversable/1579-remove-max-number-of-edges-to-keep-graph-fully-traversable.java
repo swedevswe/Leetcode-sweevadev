@@ -18,7 +18,7 @@ class Solution {
             if(edge[0] == 1){
                 if(aliceUF.union(edge[1], edge[2])){
                     edgesUsed++;
-                } 
+                }
             }
         }
         for(int[] edge : edges){
@@ -35,7 +35,6 @@ class Solution {
         }
     }
 }
-
 class UnionFind{
     private int[] parent;
     private int[] rank;
@@ -50,8 +49,8 @@ class UnionFind{
             parent[i] = i;
         }
     }
-        
         public boolean union(int u, int v){
+            
             int rootU = find(u);
             int rootV = find(v);
             
@@ -59,7 +58,7 @@ class UnionFind{
                 return false;
             }
             if(rank[rootU] > rank[rootV]){
-                parent[rootV] = rootU; 
+                parent[rootV] = rootU;
             }else if(rank[rootU] < rank[rootV]){
                 parent[rootU] = rootV;
             }else{
@@ -68,54 +67,15 @@ class UnionFind{
             }
             count--;
             return true;
+            
         }
-        public int find(int u){
-            if(parent[u] != u){
-                parent[u] = find(parent[u]);
-            }
-            return parent[u];
+    public int find(int u){
+        if(parent[u] != u){
+            parent[u] = find(parent[u]);
         }
-        public boolean isConnected(){
-            return count == 1;
-        }
-        
+        return parent[u];
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public boolean isConnected(){
+        return count == 1;
+    }
+    }
