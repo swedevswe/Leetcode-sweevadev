@@ -1,6 +1,5 @@
 class Solution {
     public int maxNumEdgesToRemove(int n, int[][] edges) {
-        
         UnionFind aliceUF = new UnionFind(n);
         UnionFind bobUF = new UnionFind(n);
         
@@ -52,12 +51,13 @@ class UnionFind{
     public boolean union(int u, int v){
         int rootU = find(u);
         int rootV = find(v);
+        
         if(rootU == rootV){
             return false;
         }
         if(rank[rootU] > rank[rootV]){
             parent[rootV] = rootU;
-        }else if(rank[rootV] < rank[rootU]){
+        }else if(rank[rootU] < rank[rootV]){
             parent[rootU] = rootV;
         }else{
             parent[rootV] = rootU;
