@@ -10,14 +10,15 @@
  */
 class Solution {
     public ListNode mergeNodes(ListNode head) {
+        
         ListNode dummy = new ListNode(0);
         ListNode currentResult = dummy;
         
         ListNode current = head.next;
         int sum = 0;
         
-        while(current!=null){
-            if(current.val!=0){
+        while(current != null){
+            if(current.val != 0){
                 sum += current.val;
             }else{
                 currentResult.next = new ListNode(sum);
