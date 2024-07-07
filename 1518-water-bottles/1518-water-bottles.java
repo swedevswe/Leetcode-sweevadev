@@ -1,5 +1,6 @@
 class Solution {
     public int numWaterBottles(int numBottles, int numExchange) {
+        
         int total_drunk = 0;
         int empty_bottles = 0;
         
@@ -8,11 +9,8 @@ class Solution {
         
         while(empty_bottles >= numExchange){
             int new_full_bottles = empty_bottles / numExchange;
-            
             empty_bottles = empty_bottles % numExchange + new_full_bottles;
-            
             total_drunk += new_full_bottles;
-            
         }
         return total_drunk;
     }
