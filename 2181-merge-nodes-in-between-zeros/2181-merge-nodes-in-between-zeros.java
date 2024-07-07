@@ -16,20 +16,20 @@ class Solution {
         ListNode currResult = dummy;
         
         int sum = 0;
+        
         ListNode current = head.next;
         
         while(current != null){
             if(current.val != 0){
                 sum += current.val;
-                
             }else{
                 currResult.next = new ListNode(sum);
                 currResult = currResult.next;
                 sum = 0;
             }
             current = current.next;
-            
         }
         return dummy.next;
+        
     }
 }
