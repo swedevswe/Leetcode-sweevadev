@@ -8,8 +8,10 @@ class Solution {
         
         while(empty_bottles >= numExchange){
             int new_full_bottles = empty_bottles / numExchange;
-            total_drunk += new_full_bottles;
+            
             empty_bottles = empty_bottles % numExchange + new_full_bottles;
+            
+            total_drunk += new_full_bottles;
             
         }
         return total_drunk;
