@@ -30,6 +30,5 @@ class Solution {
             current = current.next;
         }
         return dummy.next;
-        
     }
 }
