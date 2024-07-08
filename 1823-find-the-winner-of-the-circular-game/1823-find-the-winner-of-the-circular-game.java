@@ -1,7 +1,7 @@
 class Solution {
     public int findTheWinner(int n, int k) {
-        //Josephus Problem
-        //recursive or iterative elimination based on counting in a circular motion
+        
+        //iterative solution
         
         int winner = 0;
         
