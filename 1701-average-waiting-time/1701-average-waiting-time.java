@@ -12,11 +12,10 @@ class Solution {
             
             currentTime += orderTime;
             
-            int waitingTime = currentTime - arrivalTime;
+            int currWaitTime = currentTime - arrivalTime;
             
-            totalWaitingTime += waitingTime;
+            totalWaitingTime += currWaitTime;
         }
         return totalWaitingTime / customers.length;
-        
     }
 }
