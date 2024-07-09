@@ -5,8 +5,8 @@ class Solution {
         int currentTime = 0;
         
         for(int[] customer : customers){
-            int orderTime = customer[1];
             int arrivalTime = customer[0];
+            int orderTime = customer[1];
             
             currentTime = Math.max(currentTime, arrivalTime);
             currentTime += orderTime;
