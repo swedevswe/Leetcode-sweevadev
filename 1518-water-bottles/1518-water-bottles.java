@@ -1,6 +1,6 @@
 class Solution {
     public int numWaterBottles(int numBottles, int numExchange) {
-       
+        
         int total_drunk = 0;
         int empty_bottles = 0;
         
