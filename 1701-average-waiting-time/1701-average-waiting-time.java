@@ -17,5 +17,6 @@ class Solution {
             totalWaitingTime += waitingTime;
         }
         return totalWaitingTime / customers.length;
+        
     }
 }
