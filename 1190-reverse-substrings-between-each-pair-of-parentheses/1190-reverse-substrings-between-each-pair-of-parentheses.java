@@ -22,9 +22,5 @@ class Solution {
             result.append(c);
         }
         return result.toString();
-        
-        
-        
-        
     }
 }
