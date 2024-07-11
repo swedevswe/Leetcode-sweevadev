@@ -4,11 +4,11 @@ class Solution {
         int depth = 0;
         
         for(String log : logs){
-            if(log.equals("../")){
-                if(depth>0){
+            
+                if(log.equals("../") && depth > 0){
                     depth--;
-                }
-            }else if(!log.equals("./")){
+                
+            }else if(!log.equals("./") && (!log.equals("../"))){
                 depth++;
             }
         }
