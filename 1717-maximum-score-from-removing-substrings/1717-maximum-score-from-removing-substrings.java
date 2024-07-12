@@ -6,15 +6,15 @@ class Solution {
         //use stack for efficient removal
         //handle remaining substring
         
-        if(x < y){
-            int scoreBaFirst = calculatePoints(s, 'b', 'a', y);
-            String remainderBa = removeProcessed(s, 'b', 'a', y);
-            return scoreBaFirst + calculatePoints(remainderBa, 'a', 'b', x);
-        }else{
-            int scoreAbFirst = calculatePoints(s, 'a', 'b', x);
-            String remainderAb =removeProcessed(s, 'a', 'b', x);
-            return scoreAbFirst + calculatePoints(remainderAb, 'b', 'a', y);
-        }
+       if(x<y){
+           int scoreBaFirst = calculatePoints(s, 'b', 'a', y);
+           String remainderBa = removeProcessed(s, 'b', 'a', y);
+           return scoreBaFirst + calculatePoints(remainderBa, 'a', 'b', x);
+       }else{
+           int scoreAbFirst = calculatePoints(s, 'a', 'b', x);
+           String remainderAb = removeProcessed(s, 'a', 'b', x);
+           return scoreAbFirst + calculatePoints(remainderAb, 'b', 'a', y);
+       }
     }
     private int calculatePoints(String s, char first, char second, int points){
         int score = 0;
