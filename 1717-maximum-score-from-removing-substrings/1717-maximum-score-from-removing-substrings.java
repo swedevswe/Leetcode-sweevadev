@@ -23,6 +23,7 @@ class Solution {
             }else{
                 remainder.append(c);
             }
+            
         }
         return score;
     }
@@ -32,10 +33,13 @@ class Solution {
         for(char c : s.toCharArray()){
             if(c == second && remainder.length() > 0 && remainder.charAt(remainder.length() - 1) == first){
                 remainder.deleteCharAt(remainder.length() - 1);
+                
             }else{
                 remainder.append(c);
             }
+            
         }
         return remainder.toString();
     }
+    
 }
