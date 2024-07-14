@@ -11,35 +11,33 @@ class Solution {
             return scoreAbFirst + calculatePoints(remainderAb, 'b', 'a', y);
         }
     }
-    private int calculatePoints(String s, char first, char second, int points){
-        int score = 0;
-        
-        StringBuilder remainder = new StringBuilder();
-        
-        for(char c : s.toCharArray()){
-            if(c == second && remainder.length() > 0 && remainder.charAt(remainder.length() - 1) == first){
-                remainder.deleteCharAt(remainder.length() - 1);
-                score += points;
-            }else{
-                remainder.append(c);
-            }
+        private int calculatePoints(String s, char first, char second, int points){
+            int score = 0;
             
-        }
-        return score;
-    }
-    private String removeProcessed(String s, char first, char second){
-        StringBuilder remainder = new StringBuilder();
-        
-        for(char c : s.toCharArray()){
-            if(c == second && remainder.length() > 0 && remainder.charAt(remainder.length() - 1) == first){
-                remainder.deleteCharAt(remainder.length() - 1);
-                
-            }else{
-                remainder.append(c);
-            }
+            StringBuilder remainder = new StringBuilder();
             
+            for(char c : s.toCharArray()){
+                if(c == second && remainder.length() > 0 && remainder.charAt(remainder.length() - 1) == first){
+                    remainder.deleteCharAt(remainder.length() - 1);
+                    score += points;
+        
+                }else{
+                    remainder.append(c);
+                }
+            }
+            return score;
         }
-        return remainder.toString();
+        private String removeProcessed(String s, char first, char second){
+            StringBuilder remainder = new StringBuilder();
+            
+            for(char c : s.toCharArray()){
+                if(c == second && remainder.length() > 0 && remainder.charAt(remainder.length() - 1) == first){
+                    remainder.deleteCharAt(remainder.length() - 1);
+                }else{
+                    remainder.append(c);
+                }
+            }
+            return remainder.toString();
+        }
+        
     }
-    
-}
