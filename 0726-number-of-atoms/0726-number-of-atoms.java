@@ -1,64 +1,39 @@
 class Solution {
     public String countOfAtoms(String formula) {
-        //RECURSIVE APPROACH
+        Stack<Map<String, Integer>> stack = new Stack<>();
+        stack.push(new TreeMap<>());
 
-        //identify elements and counts
-        // handle parentheses
-        //recursive parsing = to handle nested parentheses effectively
-        //combine counts across entire formula
-        //format the output
-        Map<String, Integer> atomCounts = parseFormula(formula, new int[]{0});
-        StringBuilder result = new StringBuilder();
-        
-        List<String> sortedAtoms = new ArrayList<>(atomCounts.keySet());
-        Collections.sort(sortedAtoms);
-        
-        for (String atom : sortedAtoms) {
-            result.append(atom);
-            int count = atomCounts.get(atom);
-            if (count > 1) {
-                result.append(count);
-            }
-        }
-        return result.toString();
-    }
-    private static Map<String, Integer> parseFormula(String formula, int[] index) {
-        Map<String, Integer> atomCounts = new HashMap<>();
-        while (index[0] < formula.length() && formula.charAt(index[0]) != ')') {
-            if (formula.charAt(index[0]) == '(') {
-                index[0]++;
-                Map<String, Integer> subCounts = parseFormula(formula, index);
-                int count = parseNumber(formula, index);
-                for (String atom : subCounts.keySet()) {
-                    atomCounts.put(atom, atomCounts.getOrDefault(atom, 0) + subCounts.get(atom) * count);
+        int i = 0, n = formula.length();
+        while (i < n) {
+            if (formula.charAt(i) == '(') {
+                stack.push(new TreeMap<>());
+                i++;
+            } else if (formula.charAt(i) == ')') {
+                Map<String, Integer> top = stack.pop();
+                int iStart = ++i, multiplicity = 1;
+                while (i < n && Character.isDigit(formula.charAt(i))) i++;
+                if (i > iStart) multiplicity = Integer.parseInt(formula.substring(iStart, i));
+                for (String name: top.keySet()) {
+                    int v = top.get(name);
+                    stack.peek().put(name, stack.peek().getOrDefault(name, 0) + v * multiplicity);
                 }
             } else {
-                String atom = parseAtom(formula, index);
-                int count = parseNumber(formula, index);
-                atomCounts.put(atom, atomCounts.getOrDefault(atom, 0) + count);
+                int iStart = i++;
+                while (i < n && Character.isLowerCase(formula.charAt(i))) i++;
+                String name = formula.substring(iStart, i);
+                iStart = i;
+                while (i < n && Character.isDigit(formula.charAt(i))) i++;
+                int multiplicity = i > iStart ? Integer.parseInt(formula.substring(iStart, i)) : 1;
+                stack.peek().put(name, stack.peek().getOrDefault(name, 0) + multiplicity);
             }
         }
-        if (index[0] < formula.length() && formula.charAt(index[0]) == ')') {
-            index[0]++;
+
+        StringBuilder ans = new StringBuilder();
+        for (String name: stack.peek().keySet()) {
+            ans.append(name);
+            int multiplicity = stack.peek().get(name);
+            if (multiplicity > 1) ans.append(multiplicity);
         }
-        return atomCounts;
-    }
-    private static String parseAtom(String formula, int[] index) {
-        StringBuilder atom = new StringBuilder();
-        atom.append(formula.charAt(index[0]++)); // Upper case letter
-        while (index[0] < formula.length() && Character.isLowerCase(formula.charAt(index[0]))) {
-            atom.append(formula.charAt(index[0]++));
-        }
-        return atom.toString();
-    }
-    private static int parseNumber(String formula, int[] index) {
-        int start = index[0];
-        while (index[0] < formula.length() && Character.isDigit(formula.charAt(index[0]))) {
-            index[0]++;
-        }
-        if (start == index[0]) {
-            return 1; // Default count is 1
-        }
-        return Integer.parseInt(formula.substring(start, index[0]));
+        return ans.toString();
     }
 }
