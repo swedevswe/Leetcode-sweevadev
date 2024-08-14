@@ -29,3 +29,12 @@ class Solution {
         return count;
     }
 }
+
+//TC - O(nlogn + nlogW) = n is the length of the input array, W is the range of possible distances
+//SC - O(1) = excluding the space needed for sorting. optimal space complexity
+
+
+
+
+
+
