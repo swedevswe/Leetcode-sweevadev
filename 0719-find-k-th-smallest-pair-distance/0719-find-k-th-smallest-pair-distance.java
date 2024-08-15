@@ -1,19 +1,21 @@
 class Solution {
     public int smallestDistancePair(int[] nums, int k) {
-        //binary search = sliding window technique
         
         Arrays.sort(nums);
-        int n = nums.length, left = 0, right = nums[n-1] - nums[0];
         
+        int n = nums.length, left = 0, right = nums[n-1] - nums[0];
+      
         while(left < right){
             int mid = left + (right - left) / 2;
             int count = countPairs(nums, mid);
             
             if(count < k){
                 left = mid + 1;
+               
             }else{
-                right = mid;
+                 right = mid;
             }
+            
         }
         return left;
     }
@@ -25,16 +27,8 @@ class Solution {
                 left++;
             }
             count += right - left;
+            
         }
         return count;
     }
 }
-
-//TC - O(nlogn + nlogW) = n is the length of the input array, W is the range of possible distances
-//SC - O(1) = excluding the space needed for sorting. optimal space complexity
-
-
-
-
-
-
