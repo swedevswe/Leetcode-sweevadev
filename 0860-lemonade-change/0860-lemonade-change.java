@@ -14,8 +14,8 @@ class Solution {
                 }
             }else if(bill == 20){
                 if(five > 0 && ten > 0){
-                    ten--;
                     five--;
+                    ten--;
                 }else if(five >= 3){
                     five -= 3;
                 }else{
