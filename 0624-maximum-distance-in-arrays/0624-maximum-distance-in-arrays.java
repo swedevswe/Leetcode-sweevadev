@@ -1,6 +1,5 @@
 class Solution {
     public int maxDistance(List<List<Integer>> arrays) {
-        
         int result = 0;
         
         int min = arrays.get(0).get(0);
@@ -17,6 +16,5 @@ class Solution {
             max = Math.max(max, currMax);
         }
         return result;
-        
     }
 }
