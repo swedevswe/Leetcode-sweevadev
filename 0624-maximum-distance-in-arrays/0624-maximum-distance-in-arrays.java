@@ -1,10 +1,12 @@
 class Solution {
     public int maxDistance(List<List<Integer>> arrays) {
+        
         int result = 0;
         
-        int min = arrays.get(0).get(0), max = arrays.get(0).get(arrays.get(0).size() - 1);
+        int min = arrays.get(0).get(0);
+        int max = arrays.get(0).get(arrays.get(0).size() - 1);
         
-        for(int i = 1; i<arrays.size(); i++){
+        for(int i = 1; i < arrays.size(); i++){
             List<Integer> current = arrays.get(i);
             int currMin = current.get(0);
             int currMax = current.get(current.size() - 1);
@@ -15,5 +17,6 @@ class Solution {
             max = Math.max(max, currMax);
         }
         return result;
+        
     }
 }
