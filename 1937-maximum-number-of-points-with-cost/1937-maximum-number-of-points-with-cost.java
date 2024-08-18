@@ -20,7 +20,7 @@ class Solution {
             long rightMax = dp[n-1] - (n-1);
             
             for(int j = n-1; j >= 0; j--){
-                if(j < n - 1){
+                if(j < n-1){
                     rightMax = Math.max(rightMax, dp[j] - j);
                 }
                 newDp[j] = Math.max(newDp[j], points[i][j] + rightMax + j);
