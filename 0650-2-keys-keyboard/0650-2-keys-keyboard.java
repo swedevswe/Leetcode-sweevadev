@@ -1,6 +1,6 @@
 class Solution {
     public int minSteps(int n) {
-        int[] dp = new int[n+1];
+     int[] dp = new int[n+1];
         
         for(int i = 2; i <= n; i++){
             dp[i] = i;
