@@ -14,7 +14,9 @@ class Solution {
             
             min = Math.min(min, currMin);
             max = Math.max(max, currMax);
+            
         }
         return result;
+        
     }
 }
