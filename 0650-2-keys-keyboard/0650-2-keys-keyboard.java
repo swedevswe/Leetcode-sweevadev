@@ -1,10 +1,6 @@
 class Solution {
     public int minSteps(int n) {
-       //minimize copy and paste operations
-        //prime factorization of n
-        //dp[i] - minimum number of steps to get i A's
-        
-        int[] dp = new int[n + 1];
+        int[] dp = new int[n+1];
         
         for(int i = 2; i <= n; i++){
             dp[i] = i;
