@@ -23,5 +23,6 @@ class Solution {
             }
         }
         return ugly[n-1];
+        
     }
 }
