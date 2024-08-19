@@ -1,9 +1,11 @@
 class Solution {
     public int maxDistance(List<List<Integer>> arrays) {
-        int result = 0;
+        //distance = max - min;
         
-        int min = arrays.get(0).get(0);
         int max = arrays.get(0).get(arrays.get(0).size() - 1);
+        int min = arrays.get(0).get(0);
+        
+        int result = 0;
         
         for(int i = 1; i < arrays.size(); i++){
             List<Integer> current = arrays.get(i);
@@ -14,9 +16,7 @@ class Solution {
             
             min = Math.min(min, currMin);
             max = Math.max(max, currMax);
-            
         }
         return result;
-        
     }
 }
