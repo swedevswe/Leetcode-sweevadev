@@ -7,7 +7,7 @@ class Solution {
         
         int next2 = 2, next3 = 3, next5 = 5;
         
-        for(int i = 1; i < n; i++){
+        for(int i = 1; i< n; i++){
             int nextUgly = Math.min(next2, Math.min(next3, next5));
             ugly[i] = nextUgly;
             
@@ -23,6 +23,5 @@ class Solution {
             }
         }
         return ugly[n-1];
-        
     }
 }
