@@ -1,93 +1,67 @@
 class Solution {
-
-    List<int[]>[] graph;
-    private static final int INF = (int) 2e9;
-
-    public int[][] modifiedGraphEdges(
-        int n,
-        int[][] edges,
-        int source,
-        int destination,
-        int target
-    ) {
-        // Step 1: Build the graph, excluding edges with -1 weights
-        graph = new ArrayList[n];
+    public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
+        List<int[]>[] adjacencyList = new ArrayList[n];
         for (int i = 0; i < n; i++) {
-            graph[i] = new ArrayList<>();
+            adjacencyList[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < edges.length; i++) {
+            int nodeA = edges[i][0], nodeB = edges[i][1];
+            adjacencyList[nodeA].add(new int[]{nodeB, i});
+            adjacencyList[nodeB].add(new int[]{nodeA, i}); 
         }
 
-        for (int[] edge : edges) {
-            if (edge[2] != -1) {
-                graph[edge[0]].add(new int[] { edge[1], edge[2] });
-                graph[edge[1]].add(new int[] { edge[0], edge[2] });
+        int[][] distances = new int[n][2];
+        Arrays.fill(distances[source], 0);
+        for (int i = 0; i < n; i++) {
+            if (i != source) {
+                distances[i][0] = distances[i][1] = Integer.MAX_VALUE;
             }
         }
 
-        // Step 2: Compute the initial shortest distance from source to destination
-        int currentShortestDistance = runDijkstra(n, source, destination);
-        if (currentShortestDistance < target) {
-            return new int[0][0];
-        }
+        runDijkstra(adjacencyList, edges, distances, source, 0, 0);
+        int difference = target - distances[destination][0];
+        if (difference < 0) return new int[][]{}; 
+        runDijkstra(adjacencyList, edges, distances, source, difference, 1);
+        if (distances[destination][1] < target) return new int[][]{}; 
 
-        boolean matchesTarget = (currentShortestDistance == target);
-
-        // Step 3: Iterate through each edge to adjust its weight if necessary
         for (int[] edge : edges) {
-            if (edge[2] != -1) continue; // Skip edges with already known weights
-
-            // Set edge weight to a large value if current distance matches target, else set
-            // to 1
-            edge[2] = matchesTarget ? INF : 1;
-            graph[edge[0]].add(new int[] { edge[1], edge[2] });
-            graph[edge[1]].add(new int[] { edge[0], edge[2] });
-
-            // Step 4: If current shortest distance does not match target
-            if (!matchesTarget) {
-                // Compute the new shortest distance with the updated edge weight
-                int newDistance = runDijkstra(n, source, destination);
-                // If the new distance is within the target range, update edge weight to match
-                // target
-                if (newDistance <= target) {
-                    matchesTarget = true;
-                    edge[2] += target - newDistance;
-                }
-            }
+            if (edge[2] == -1) edge[2] = 1; 
         }
-
-        // Return modified edges if the target distance is achieved, otherwise return an
-        // empty result
-        return matchesTarget ? edges : new int[0][0];
+        return edges;
     }
 
-    // Dijkstra's algorithm to find the shortest path distance
-    private int runDijkstra(int n, int source, int destination) {
-        int[] minDistance = new int[n];
-        PriorityQueue<int[]> minHeap = new PriorityQueue<>(
-            (a, b) -> a[1] - b[1]
-        );
+    private void runDijkstra(List<int[]>[] adjacencyList, int[][] edges, int[][] distances, int source, int difference, int run) {
+        int n = adjacencyList.length;
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        priorityQueue.add(new int[]{source, 0});
+        distances[source][run] = 0;
 
-        Arrays.fill(minDistance, INF);
-        minDistance[source] = 0;
-        minHeap.add(new int[] { source, 0 });
+        while (!priorityQueue.isEmpty()) {
+            int[] current = priorityQueue.poll();
+            int currentNode = current[0];
+            int currentDistance = current[1];
 
-        while (!minHeap.isEmpty()) {
-            int[] curr = minHeap.poll();
-            int u = curr[0];
-            int d = curr[1];
+            if (currentDistance > distances[currentNode][run]) continue;
 
-            if (d > minDistance[u]) continue;
+            for (int[] neighbor : adjacencyList[currentNode]) {
+                int nextNode = neighbor[0], edgeIndex = neighbor[1];
+                int weight = edges[edgeIndex][2];
 
-            for (int[] neighbor : graph[u]) {
-                int v = neighbor[0];
-                int weight = neighbor[1];
+                if (weight == -1) weight = 1; // Initially consider -1 as 1
 
-                if (d + weight < minDistance[v]) {
-                    minDistance[v] = d + weight;
-                    minHeap.add(new int[] { v, minDistance[v] });
+                if (run == 1 && edges[edgeIndex][2] == -1) {
+           
+                    int newWeight = difference + distances[nextNode][0] - distances[currentNode][1];
+                    if (newWeight > weight) {
+                        edges[edgeIndex][2] = weight = newWeight; 
+                    }
+                }
+
+                if (distances[nextNode][run] > distances[currentNode][run] + weight) {
+                    distances[nextNode][run] = distances[currentNode][run] + weight;
+                    priorityQueue.add(new int[]{nextNode, distances[nextNode][run]});
                 }
             }
         }
-
-        return minDistance[destination];
     }
 }
