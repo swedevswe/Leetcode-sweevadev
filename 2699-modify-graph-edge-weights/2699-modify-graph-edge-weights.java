@@ -1,65 +1,55 @@
 class Solution {
-    public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
-        List<int[]>[] graph = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            graph[i] = new ArrayList<>();
+    public int[][] modifiedGraphEdges(int nodeCount, int[][] edges, int sourceNode, int destinationNode, int targetDistance) {
+        List<int[]>[] adjacencyList = new ArrayList[nodeCount];
+        for (int i = 0; i < nodeCount; i++) {
+            adjacencyList[i] = new ArrayList<>();
         }
         for (int i = 0; i < edges.length; i++) {
-            int u = edges[i][0], v = edges[i][1];
-            graph[u].add(new int[]{v, i});
-            graph[v].add(new int[]{u, i}); // Construct graph with edge indices
+            int fromNode = edges[i][0], toNode = edges[i][1];
+            adjacencyList[fromNode].add(new int[]{toNode, i});
+            adjacencyList[toNode].add(new int[]{fromNode, i}); // Construct graph with edge indices
         }
-
-        int[][] dist = new int[n][2];
-        for (int i = 0; i < n; i++) {
-            if (i != source) {
-                dist[i][0] = dist[i][1] = Integer.MAX_VALUE;
+        int[][] shortestDistances = new int[nodeCount][2];
+        for (int i = 0; i < nodeCount; i++) {
+            if (i != sourceNode) {
+                shortestDistances[i][0] = shortestDistances[i][1] = Integer.MAX_VALUE;
             }
         }
-
-        dijkstra(graph, edges, dist, source, 0, 0);
-        int delta = target - dist[destination][0];
-        if (delta < 0) return new int[][]{}; // Not possible to reach the target
-
-        dijkstra(graph, edges, dist, source, delta, 1);
-        if (dist[destination][1] < target) return new int[][]{}; // Still not possible
-
+        dijkstra(adjacencyList, edges, shortestDistances, sourceNode, 0, 0);
+        int requiredIncrease = targetDistance - shortestDistances[destinationNode][0];
+        if (requiredIncrease < 0) return new int[][]{}; // Not possible to reach the target
+        dijkstra(adjacencyList, edges, shortestDistances, sourceNode, requiredIncrease, 1);
+        if (shortestDistances[destinationNode][1] < targetDistance) return new int[][]{}; // Still not possible
         for (int[] edge : edges) {
             if (edge[2] == -1) edge[2] = 1; // Set remaining -1 edges to 1
         }
         return edges;
     }
 
-    private void dijkstra(List<int[]>[] graph, int[][] edges, int[][] dist, int source, int delta, int run) {
-        int n = graph.length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
-        pq.add(new int[]{source, 0});
-        dist[source][run] = 0;
-
-        while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int u = current[0];
-            int d = current[1];
-
-            if (d > dist[u][run]) continue;
-
-            for (int[] neighbor : graph[u]) {
-                int v = neighbor[0], edgeIndex = neighbor[1];
-                int weight = edges[edgeIndex][2];
-
-                if (weight == -1) weight = 1; // Initially consider -1 as 1
-
-                if (run == 1 && edges[edgeIndex][2] == -1) {
+    private void dijkstra(List<int[]>[] adjacencyList, int[][] edges, int[][] shortestDistances, int startNode, int requiredIncrease, int runIndex) {
+        int nodeCount = adjacencyList.length;
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
+        minHeap.add(new int[]{startNode, 0});
+        shortestDistances[startNode][runIndex] = 0;
+        while (!minHeap.isEmpty()) {
+            int[] current = minHeap.poll();
+            int currentNode = current[0];
+            int currentDistance = current[1];
+            if (currentDistance > shortestDistances[currentNode][runIndex]) continue;
+            for (int[] neighbor : adjacencyList[currentNode]) {
+                int neighborNode = neighbor[0], edgeIndex = neighbor[1];
+                int edgeWeight = edges[edgeIndex][2];
+                if (edgeWeight == -1) edgeWeight = 1; // Initially consider -1 as 1
+                if (runIndex == 1 && edges[edgeIndex][2] == -1) {
                     // Calculate the required weight adjustment for the second run
-                    int newWeight = delta + dist[v][0] - dist[u][1];
-                    if (newWeight > weight) {
-                        edges[edgeIndex][2] = weight = newWeight; // Update edge weight
+                    int newWeight = requiredIncrease + shortestDistances[neighborNode][0] - shortestDistances[currentNode][1];
+                    if (newWeight > edgeWeight) {
+                        edges[edgeIndex][2] = edgeWeight = newWeight; // Update edge weight
                     }
                 }
-
-                if (dist[v][run] > dist[u][run] + weight) {
-                    dist[v][run] = dist[u][run] + weight;
-                    pq.add(new int[]{v, dist[v][run]});
+                if (shortestDistances[neighborNode][runIndex] > shortestDistances[currentNode][runIndex] + edgeWeight) {
+                    shortestDistances[neighborNode][runIndex] = shortestDistances[currentNode][runIndex] + edgeWeight;
+                    minHeap.add(new int[]{neighborNode, shortestDistances[neighborNode][runIndex]});
                 }
             }
         }
