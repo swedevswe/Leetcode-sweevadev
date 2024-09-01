@@ -36,13 +36,13 @@ class Solution {
         dist[source][run] = 0;
 
         while (!pq.isEmpty()) {
-            int[] current = pq.poll();
-            int currentNode = current[0];
-            int currentDistance = current[1];
+            int[] curr = pq.poll();
+            int currNode = curr[0];
+            int currDist = curr[1];
 
-            if (currentDistance > dist[currentNode][run]) continue;
+            if (currDist > dist[currNode][run]) continue;
 
-            for (int[] neighbor : List[currentNode]) {
+            for (int[] neighbor : List[currNode]) {
                 int nextNode = neighbor[0], edgeIndex = neighbor[1];
                 int weight = edges[edgeIndex][2];
 
@@ -50,14 +50,14 @@ class Solution {
 
                 if (run == 1 && edges[edgeIndex][2] == -1) {
            
-                    int newWeight = difference + dist[nextNode][0] - dist[currentNode][1];
+                    int newWeight = difference + dist[nextNode][0] - dist[currNode][1];
                     if (newWeight > weight) {
                         edges[edgeIndex][2] = weight = newWeight; 
                     }
                 }
 
-                if (dist[nextNode][run] > dist[currentNode][run] + weight) {
-                    dist[nextNode][run] = dist[currentNode][run] + weight;
+                if (dist[nextNode][run] > dist[currNode][run] + weight) {
+                    dist[nextNode][run] = dist[currNode][run] + weight;
                     pq.add(new int[]{nextNode, dist[nextNode][run]});
                 }
             }
