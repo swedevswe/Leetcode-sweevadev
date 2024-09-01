@@ -10,38 +10,37 @@ class Solution {
             List[nodeB].add(new int[]{nodeA, i}); 
         }
 
-        int[][] distances = new int[n][2];
-        Arrays.fill(distances[source], 0);
+        int[][] dist = new int[n][2];
+        Arrays.fill(dist[source], 0);
         for (int i = 0; i < n; i++) {
             if (i != source) {
-                distances[i][0] = distances[i][1] = Integer.MAX_VALUE;
+                dist[i][0] = dist[i][1] = Integer.MAX_VALUE;
             }
         }
+            djikstra(List, edges, dist, source, 0, 0);
+            int diff = target - dist[destination][0];
+            if(diff < 0) return new int[][]{};
+            djikstra(List, edges, dist, source, diff, 1);
+            if(dist[destination][1] < target) return new int[][]{};
+                
+            for(int[] edge : edges){
+                if(edge[2] == -1) edge[2] = 1;
+                }
+            return edges;
+            }
 
-        runDijkstra(List, edges, distances, source, 0, 0);
-        int difference = target - distances[destination][0];
-        if (difference < 0) return new int[][]{}; 
-        runDijkstra(List, edges, distances, source, difference, 1);
-        if (distances[destination][1] < target) return new int[][]{}; 
-
-        for (int[] edge : edges) {
-            if (edge[2] == -1) edge[2] = 1; 
-        }
-        return edges;
-    }
-
-    private void runDijkstra(List<int[]>[] List, int[][] edges, int[][] distances, int source, int difference, int run) {
+    private void djikstra(List<int[]>[] List, int[][] edges, int[][] dist, int source, int difference, int run) {
         int n = List.length;
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
         pq.add(new int[]{source, 0});
-        distances[source][run] = 0;
+        dist[source][run] = 0;
 
         while (!pq.isEmpty()) {
             int[] current = pq.poll();
             int currentNode = current[0];
             int currentDistance = current[1];
 
-            if (currentDistance > distances[currentNode][run]) continue;
+            if (currentDistance > dist[currentNode][run]) continue;
 
             for (int[] neighbor : List[currentNode]) {
                 int nextNode = neighbor[0], edgeIndex = neighbor[1];
@@ -51,15 +50,15 @@ class Solution {
 
                 if (run == 1 && edges[edgeIndex][2] == -1) {
            
-                    int newWeight = difference + distances[nextNode][0] - distances[currentNode][1];
+                    int newWeight = difference + dist[nextNode][0] - dist[currentNode][1];
                     if (newWeight > weight) {
                         edges[edgeIndex][2] = weight = newWeight; 
                     }
                 }
 
-                if (distances[nextNode][run] > distances[currentNode][run] + weight) {
-                    distances[nextNode][run] = distances[currentNode][run] + weight;
-                    pq.add(new int[]{nextNode, distances[nextNode][run]});
+                if (dist[nextNode][run] > dist[currentNode][run] + weight) {
+                    dist[nextNode][run] = dist[currentNode][run] + weight;
+                    pq.add(new int[]{nextNode, dist[nextNode][run]});
                 }
             }
         }
