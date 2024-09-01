@@ -32,12 +32,12 @@ class Solution {
 
     private void runDijkstra(List<int[]>[] List, int[][] edges, int[][] distances, int source, int difference, int run) {
         int n = List.length;
-        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-        priorityQueue.add(new int[]{source, 0});
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{source, 0});
         distances[source][run] = 0;
 
-        while (!priorityQueue.isEmpty()) {
-            int[] current = priorityQueue.poll();
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
             int currentNode = current[0];
             int currentDistance = current[1];
 
@@ -59,7 +59,7 @@ class Solution {
 
                 if (distances[nextNode][run] > distances[currentNode][run] + weight) {
                     distances[nextNode][run] = distances[currentNode][run] + weight;
-                    priorityQueue.add(new int[]{nextNode, distances[nextNode][run]});
+                    pq.add(new int[]{nextNode, distances[nextNode][run]});
                 }
             }
         }
