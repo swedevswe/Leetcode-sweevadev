@@ -5,51 +5,61 @@ class Solution {
             List[i] = new ArrayList<>();
         }
         for (int i = 0; i < edges.length; i++) {
-            int from = edges[i][0], to = edges[i][1];
-            List[from].add(new int[]{to, i});
-            List[to].add(new int[]{from, i}); // Construct graph with edge indices
+            int nodeA = edges[i][0], nodeB = edges[i][1];
+            List[nodeA].add(new int[]{nodeB, i});
+            List[nodeB].add(new int[]{nodeA, i}); 
         }
-        int[][] shortestDist = new int[n][2];
+
+        int[][] distances = new int[n][2];
+        Arrays.fill(distances[source], 0);
         for (int i = 0; i < n; i++) {
             if (i != source) {
-                shortestDist[i][0] = shortestDist[i][1] = Integer.MAX_VALUE;
+                distances[i][0] = distances[i][1] = Integer.MAX_VALUE;
             }
         }
-        dijkstra(List, edges, shortestDist, source, 0, 0);
-        int reqIncr = target - shortestDist[destination][0];
-        if (reqIncr < 0) return new int[][]{}; // Not possible to reach the target
-        dijkstra(List, edges, shortestDist, source, reqIncr, 1);
-        if (shortestDist[destination][1] < target) return new int[][]{}; // Still not possible
+
+        runDijkstra(List, edges, distances, source, 0, 0);
+        int difference = target - distances[destination][0];
+        if (difference < 0) return new int[][]{}; 
+        runDijkstra(List, edges, distances, source, difference, 1);
+        if (distances[destination][1] < target) return new int[][]{}; 
+
         for (int[] edge : edges) {
-            if (edge[2] == -1) edge[2] = 1; // Set remaining -1 edges to 1
+            if (edge[2] == -1) edge[2] = 1; 
         }
         return edges;
     }
 
-    private void dijkstra(List<int[]>[] List, int[][] edges, int[][] shortestDist, int start, int reqIncr, int runIndx) {
+    private void runDijkstra(List<int[]>[] List, int[][] edges, int[][] distances, int source, int difference, int run) {
         int n = List.length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1]));
-        pq.add(new int[]{start, 0});
-        shortestDist[start][runIndx] = 0;
-        while (!pq.isEmpty()) {
-            int[] curr = pq.poll();
-            int currNode = curr[0];
-            int currDist = curr[1];
-            if (currDist > shortestDist[currNode][runIndx]) continue;
-            for (int[] neighbor : List[currNode]) {
-                int neighborNode = neighbor[0], edgeIndx = neighbor[1];
-                int edgeWeight = edges[edgeIndx][2];
-                if (edgeWeight == -1) edgeWeight = 1; // Initially consider -1 as 1
-                if (runIndx == 1 && edges[edgeIndx][2] == -1) {
-                    // Calculate the required weight adjustment for the second run
-                    int newWeight = reqIncr + shortestDist[neighborNode][0] - shortestDist[currNode][1];
-                    if (newWeight > edgeWeight) {
-                        edges[edgeIndx][2] = edgeWeight = newWeight; // Update edge weight
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        priorityQueue.add(new int[]{source, 0});
+        distances[source][run] = 0;
+
+        while (!priorityQueue.isEmpty()) {
+            int[] current = priorityQueue.poll();
+            int currentNode = current[0];
+            int currentDistance = current[1];
+
+            if (currentDistance > distances[currentNode][run]) continue;
+
+            for (int[] neighbor : List[currentNode]) {
+                int nextNode = neighbor[0], edgeIndex = neighbor[1];
+                int weight = edges[edgeIndex][2];
+
+                if (weight == -1) weight = 1; // Initially consider -1 as 1
+
+                if (run == 1 && edges[edgeIndex][2] == -1) {
+           
+                    int newWeight = difference + distances[nextNode][0] - distances[currentNode][1];
+                    if (newWeight > weight) {
+                        edges[edgeIndex][2] = weight = newWeight; 
                     }
                 }
-                if (shortestDist[neighborNode][runIndx] > shortestDist[currNode][runIndx] + edgeWeight) {
-                    shortestDist[neighborNode][runIndx] = shortestDist[currNode][runIndx] + edgeWeight;
-                    pq.add(new int[]{neighborNode, shortestDist[neighborNode][runIndx]});
+
+                if (distances[nextNode][run] > distances[currentNode][run] + weight) {
+                    distances[nextNode][run] = distances[currentNode][run] + weight;
+                    priorityQueue.add(new int[]{nextNode, distances[nextNode][run]});
                 }
             }
         }
