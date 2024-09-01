@@ -29,7 +29,7 @@ class Solution {
             return edges;
             }
 
-    private void djikstra(List<int[]>[] List, int[][] edges, int[][] dist, int source, int difference, int run) {
+    private void djikstra(List<int[]>[] List, int[][] edges, int[][] dist, int source, int diff, int run) {
         int n = List.length;
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
         pq.add(new int[]{source, 0});
@@ -50,7 +50,7 @@ class Solution {
 
                 if (run == 1 && edges[edgeIndex][2] == -1) {
            
-                    int newWeight = difference + dist[nextNode][0] - dist[currNode][1];
+                    int newWeight = diff + dist[nextNode][0] - dist[currNode][1];
                     if (newWeight > weight) {
                         edges[edgeIndex][2] = weight = newWeight; 
                     }
