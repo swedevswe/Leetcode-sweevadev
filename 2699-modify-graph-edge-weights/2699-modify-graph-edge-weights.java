@@ -5,10 +5,11 @@ class Solution {
         for(int i = 0; i < n; i++){
             List[i] = new ArrayList<>();
         }
+        
         for(int i = 0; i < edges.length; i++){
-            int nodeA = edges[i][0], nodeB = edges[i][1];
-            List[nodeA].add(new int[]{nodeB, i});
-            List[nodeB].add(new int[]{nodeA, i});
+            int a = edges[i][0], b = edges[i][1];
+            List[a].add(new int[]{b, i});
+            List[b].add(new int[]{a, i});
         }
         
         int[][] dist = new int[n][2];
@@ -18,18 +19,18 @@ class Solution {
                 dist[i][0] = dist[i][1] = Integer.MAX_VALUE;
             }
         }
-        djikstra(List, edges, dist, source, 0, 0);
+        dijkstra(List, edges, dist, source, 0, 0);
         int diff = target - dist[destination][0];
         if(diff < 0) return new int[][]{};
-        djikstra(List, edges, dist, source, diff, 1);
+        dijkstra(List, edges, dist, source, diff, 1);
         if(dist[destination][1] < target) return new int[][]{};
         
         for(int[] edge : edges){
             if(edge[2] == -1) edge[2] = 1;
         }
-        return edges;
+        return edges; 
     }
-    private void djikstra(List<int[]>[] List, int[][] edges, int[][] dist, int source, int diff, int run){
+    private void dijkstra(List<int[]>[] List, int[][] edges, int[][] dist, int source, int diff, int run){
         int n = List.length;
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
         pq.add(new int[]{source, 0});
@@ -57,9 +58,7 @@ class Solution {
                 if(dist[nextNode][run] > dist[currNode][run] + weight){
                     dist[nextNode][run] = dist[currNode][run] + weight;
                     pq.add(new int[]{nextNode, dist[nextNode][run]});
-                    }
-                
-                
+                }
             }
         }
     }
