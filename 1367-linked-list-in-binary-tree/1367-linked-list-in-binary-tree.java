@@ -44,6 +44,5 @@ class Solution {
             return false;
         }
         return dfs(head.next, node.left) || dfs(head.next, node.right);
-        
     }
 }
