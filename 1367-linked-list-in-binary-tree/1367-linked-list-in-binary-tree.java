@@ -31,7 +31,6 @@ class Solution {
         if(dfs(head, root)){
             return true;
         }
-        
         return isSubPath(head, root.left) || isSubPath(head, root.right);
     }
     private boolean dfs(ListNode head, TreeNode node){
@@ -44,7 +43,6 @@ class Solution {
         if(head.val != node.val){
             return false;
         }
-        
         return dfs(head.next, node.left) || dfs(head.next, node.right);
     }
 }
