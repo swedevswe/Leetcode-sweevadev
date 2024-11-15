@@ -17,14 +17,13 @@ class Solution {
         }
         
         int minLen = Math.min(n - left - 1, right);
-        
-        int i = 0, j = right;
-        while(i <= left && j < n){
-            if(arr[i] <= arr[j]){
-                minLen = Math.min(minLen, j - i - 1);
+        int i = 0;
+        while(i <= left && right < n){
+            if(arr[i] <= arr[right]){
+                minLen = Math.min(minLen, right - i - 1);
                 i++;
             }else{
-                j++;
+                right++;
             }
         }
         return minLen;
