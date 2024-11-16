@@ -7,8 +7,8 @@ class Solution {
             if(!deque.isEmpty() && deque.peekFirst() < i - k + 1){
                 deque.pollFirst();
             }
-            if(!deque.isEmpty() && nums[i] != nums[i - 1] + 1){
-                deque.clear();
+            if(!deque.isEmpty() && nums[i] != nums[i-1] + 1){
+                deque.clear();                                                          
             }
             deque.offerLast(i);
             if(i >= k - 1){
