@@ -1,7 +1,7 @@
 class Solution {
     public long maximumSubarraySum(int[] nums, int k) {
-        long currSum = 0;
         long maxSum = 0;
+        long currSum = 0;
         HashSet<Integer> set = new HashSet<>();
         for(int i = 0; i < nums.length; i++){
             currSum += nums[i];
