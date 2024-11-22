@@ -1,25 +1,33 @@
 class Solution {
     public int maxEqualRowsAfterFlips(int[][] matrix) {
+        Map<String, Integer> map = new HashMap<>();
         int maxRows = 0;
-        for(int[] targetRow : matrix){
-            int count = 0;
-            for(int[] row : matrix){
-                if(canBeMadeEqual(targetRow, row)){
-                    count++;
-                }
+
+        for (int[] row : matrix) {
+            StringBuilder pattern = new StringBuilder();
+            StringBuilder complement = new StringBuilder();
+
+            // Build both the pattern and its complement
+            for (int val : row) {
+                pattern.append(val);          // Original row
+                complement.append(1 - val);   // Complement row
             }
-            maxRows = Math.max(maxRows, count);
+
+            String normalisedPattern = pattern.toString();
+            String normalisedComplement = complement.toString();
+
+            // Use either the pattern or its complement, whichever is canonical
+            String key = normalisedPattern.compareTo(normalisedComplement) <= 0 
+                         ? normalisedPattern 
+                         : normalisedComplement;
+
+            // Increment counts for the chosen key
+            map.put(key, map.getOrDefault(key, 0) + 1);
+
+            // Update the maximum rows that can be made uniform
+            maxRows = Math.max(maxRows, map.get(key));
         }
+
         return maxRows;
-    }
-    private static boolean canBeMadeEqual(int[] targetRow, int[] row){
-        int n = targetRow.length;
-        int flipPattern = row[0] ^ targetRow[0];
-        for(int i = 1; i < n; i++){
-            if((row[i] ^ targetRow[i]) != flipPattern){
-                return false;
-            }
-        }
-        return true;
     }
 }
