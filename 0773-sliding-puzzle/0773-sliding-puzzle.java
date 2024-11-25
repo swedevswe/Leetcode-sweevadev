@@ -5,7 +5,6 @@ class Solution {
         //visited - to track already visited configurations.
         //solved state 
         String target = "123450";
-        int rows = 2, cols = 3;
         StringBuilder sb = new StringBuilder();
         for(int[] row : board){
             for(int num : row){
