@@ -17,9 +17,12 @@ class Solution {
                 int newRow = row + dir[0];
                 int newCol = col + dir[1];
                 if(newRow >= 0 && newRow < m && newCol >= 0 && newCol < n && !visited[newRow][newCol]){
-                    int waitTime = Math.max(0, grid[newRow][newCol] - currTime - 1) % 2;
-                    int newTime = Math.max(currTime + 1, grid[newRow][newCol]) + waitTime;
-                    pq.offer(new int[]{newRow, newCol, newTime});   
+                    int nextTime = currTime + 1;
+                    if(nextTime < grid[newRow][newCol]){
+                        int waitTime = (grid[newRow][newCol] - nextTime) % 2 == 0 ? 0 : 1;
+                        nextTime = grid[newRow][newCol] + waitTime;
+                    }
+                    pq.offer(new int[]{newRow, newCol, nextTime});
                 }
             }
         }
