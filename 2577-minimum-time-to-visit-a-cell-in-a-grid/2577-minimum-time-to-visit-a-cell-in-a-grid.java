@@ -5,7 +5,7 @@ class Solution {
         int n = grid[0].length;
         boolean[][] visited = new boolean[m][n];
         int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[2] - b[2]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> a[2] - b[2]); //min-heap
         pq.offer(new int[]{0,0,0});
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
