@@ -1,37 +1,36 @@
 class Solution {
     public int minimumObstacles(int[][] grid) {
+        //modified BFS with pq.
         int m = grid.length;
         int n = grid[0].length;
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-        int[][] dist = new int[m][n];
-        for(int[] row : dist){
+        int[][] cost = new int[m][n];
+        for(int[] row : cost){
             Arrays.fill(row, Integer.MAX_VALUE);
         }
-        dist[0][0] = 0;
         Deque<int[]> dq = new ArrayDeque<>();
-        dq.addFirst(new int[]{0, 0});
+        dq.add(new int[]{0,0});
+        cost[0][0] = 0;
+        int[][] directions = {{-1,0},{1,0},{0,-1},{0,1}};
         while(!dq.isEmpty()){
-            int[] current = dq.pollFirst();
-            int x = current[0];
-            int y = current[1];
-            for(int k = 0; k < 4; k++){
-                int nx = x + dx[k];
-                int ny = y + dy[k];
-                if(nx < 0 || ny < 0 || nx >= m || ny >= n){
-                    continue;
-                }
-                int newCost = dist[x][y] + grid[nx][ny];
-                if(newCost < dist[nx][ny]){
-                    dist[nx][ny] = newCost;
-                    if(grid[nx][ny] == 0){
-                        dq.addFirst(new int[] {nx, ny});
-                    }else{
-                        dq.addLast(new int[]{nx, ny});
+            int[] cell = dq.pollFirst();
+            int row = cell[0];
+            int col = cell[1];
+            for(int[] dir : directions){
+                int newRow = row + dir[0];
+                int newCol = col + dir[1];
+                if(newRow >= 0 && newRow < m && newCol >= 0 && newCol < n){
+                    int newCost = cost[row][col] + grid[newRow][newCol];
+                    if(newCost < cost[newRow][newCol]){
+                        cost[newRow][newCol] = newCost;
+                        if(grid[newRow][newCol] == 0){
+                            dq.addFirst(new int[]{newRow, newCol});
+                        }else{
+                            dq.addLast(new int[]{newRow, newCol});
+                        }
                     }
                 }
             }
         }
-        return dist[m - 1][n - 1];
+                       return cost[m-1][n-1];
     }
 }
