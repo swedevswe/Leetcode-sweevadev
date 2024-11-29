@@ -1,5 +1,5 @@
 class Solution {
-    private static final int[][] MOVES = {{-1,0},{0,1},{1,0},{0,-1}};
+    private static final int[][] DIRECTIONS = {{-1,0},{0,1},{1,0},{0,-1}};
     public int minimumTime(int[][] grid) {
         if(grid[0][1] > 1 && grid[1][0] > 1){
            return -1; 
@@ -13,7 +13,7 @@ class Solution {
         while(!pq.isEmpty()){
             int[] curr = pq.poll();
             int currTime = curr[0], row = curr[1], col = curr[2];
-            for(int[] dir : MOVES){
+            for(int[] dir : DIRECTIONS){
                 int newRow = row + dir[0];
                 int newCol = col + dir[1];
                 if(newRow < 0 || newRow >= m || newCol < 0 || newCol >= n || visited[newRow][newCol]) {
