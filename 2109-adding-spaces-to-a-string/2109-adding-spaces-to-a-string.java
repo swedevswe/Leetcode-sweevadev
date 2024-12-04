@@ -1,15 +1,15 @@
 class Solution {
     public String addSpaces(String s, int[] spaces) {
-        int total = s.length() + spaces.length;
-        char[] result = new char[total];
-        int sPointer = 0, spacePointer = 0, resultPointer = 0;
-        while(sPointer < s.length()){
-            if(spacePointer < spaces.length && sPointer == spaces[spacePointer]){
-                result[resultPointer++] = ' ';
-                spacePointer++;
+        StringBuilder result = new StringBuilder();
+        result.ensureCapacity(s.length() + spaces.length);
+        int spaceIndex = 0;
+        for(int stringIndex = 0; stringIndex < s.length(); stringIndex++){
+            if(spaceIndex < spaces.length && stringIndex == spaces[spaceIndex]){
+                result.append(' ');
+                spaceIndex++;
             }
-            result[resultPointer++] = s.charAt(sPointer++);
+            result.append(s.charAt(stringIndex));
         }
-        return new String(result);
+        return result.toString();
     }
 }
