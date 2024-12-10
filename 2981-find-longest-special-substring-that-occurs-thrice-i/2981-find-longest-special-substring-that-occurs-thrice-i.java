@@ -1,27 +1,28 @@
 class Solution {
     public int maximumLength(String s) {
-        int n = s.length();
-        for(int len = n; len >= 1; len--){
-            HashMap<String, Integer> map = new HashMap<>();
-            for(int i = 0; i <= n - len; i++){
-                String sub = s.substring(i, i + len);
-                if(isSpecial(sub)){
-                    map.put(sub, map.getOrDefault(sub, 0) + 1);
-                    if(map.get(sub) >= 3){
-                        return len;
-                    }
+        Map<Pair<Character, Integer>, Integer> count = new HashMap<>();
+        int subLen = 0;
+        for(int i = 0; i < s.length(); i++){
+            char character = s.charAt(i);
+            subLen = 0;
+            for(int j = i; j < s.length(); j++){
+                if(character == s.charAt(j)){
+                    subLen++;
+                    Pair<Character, Integer> key = new Pair<>(character, subLen);
+                    count.put(key, count.getOrDefault(key, 0) + 1);
+                }else{
+                    break;
                 }
             }
         }
-        return -1;
-    }
-    private boolean isSpecial(String s){
-        char firstChar = s.charAt(0);
-        for(char c : s.toCharArray()){
-            if(c != firstChar){
-                return false;
+        int ans = 0;
+        for(Map.Entry<Pair<Character, Integer>, Integer> entry : count.entrySet()){
+            int len = entry.getKey().getValue();
+            if(entry.getValue() >= 3 && len > ans){
+                ans = len;
             }
         }
-        return true;
+        return ans == 0 ? -1 : ans;
     }
 }
+
